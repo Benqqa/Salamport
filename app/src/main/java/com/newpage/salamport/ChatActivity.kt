@@ -40,8 +40,10 @@ data class Chat(
     val members: ArrayList<Int>? = null
 )
 
-class ChatAdapter(private val context: Context, private val chats: ArrayList<Chat>,
-private val session: String, private val token: String, private val client: OkHttpClient) :
+class ChatAdapter(
+    private val context: ChatActivity, private val chats: ArrayList<Chat>,
+    private val session: String, private val token: String, private val client: OkHttpClient
+) :
     RecyclerView.Adapter<ChatAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -83,7 +85,7 @@ private val session: String, private val token: String, private val client: OkHt
                 val responseString =
                     withContext(Dispatchers.IO) { client.newCall(request).await().body?.string() }
                 val jsonWithChatUsers = JSONArray(responseString)
-                val userID = jsonWithChatUsers[0].toString()
+                val userID = jsonWithChatUsers.getString(0)
 
                 val requestBodyForProfile = FormBody.Builder()
                     .add("token", token)
@@ -91,7 +93,7 @@ private val session: String, private val token: String, private val client: OkHt
                     .add("user_id", userID)
                     .build()
                 val requestForProfile = Request.Builder()
-                    .url("https://salamport.newpage.xyz/api/view_profle.php")
+                    .url("https://salamport.newpage.xyz/api/view_profile.php")
                     .post(requestBodyForProfile)
                     .addHeader("Content-Type", "application/x-www-form-urlencoded")
                     .build()
@@ -106,20 +108,21 @@ private val session: String, private val token: String, private val client: OkHt
             loadWithGlide(photo, holder)
         }
         holder.goToMessages.setOnClickListener {
-            MessagesActivity.startFrom(context, session, token, chat.id)
+            MessagesActivity.startFrom(context, session, token, chat.id, chat.isPrivate)
         }
-
-
     }
+
     private fun loadWithGlide(photo: String, holder: ViewHolder) {
-        Glide
-            .with(context)
-            .load(photo)
-            .apply(
-                RequestOptions
-                    .bitmapTransform(RoundedCorners(250))
-            )
-            .into(holder.photo)
+        context.runOnUiThread {
+            Glide
+                .with(context)
+                .load(photo)
+                .apply(
+                    RequestOptions
+                        .bitmapTransform(RoundedCorners(250))
+                )
+                .into(holder.photo)
+        }
     }
 }
 
@@ -204,8 +207,10 @@ class ChatActivity : AppCompatActivity() {
                 val responseJSON = JSONArray(responseString.body?.string())
                 runOnUiThread { renderChatList(responseJSON) }
             } catch (j: JSONException) {
-                UserActivity.startFrom(this@ChatActivity, grishaToken,
-                grishaSession)
+                UserActivity.startFrom(
+                    this@ChatActivity, grishaToken,
+                    grishaSession
+                )
             }
         }
     }

@@ -11,9 +11,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -23,6 +27,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.json.JSONArray
 import org.json.JSONException
+import org.json.JSONObject
 import ru.gildor.coroutines.okhttp.await
 import java.text.SimpleDateFormat
 import java.util.*
@@ -36,14 +41,24 @@ data class Message(
     val datetime: Date
 )
 
-class MessagesAdapter(
-    private val context: Context,
+class MessagesAdapter : RecyclerView.Adapter<MessagesAdapter.ViewHolder> {
+
+    private val context: Context
     private val messages: ArrayList<Message>
-) : RecyclerView.Adapter<MessagesAdapter.ViewHolder>() {
+    private val avatarsMap: HashMap<String, String>?
+
+    constructor(
+        context: Context, messages: ArrayList<Message>,
+        avatars: HashMap<String, String>? = null
+    ) : super() {
+        this.context = context
+        this.messages = messages
+        this.avatarsMap = avatars
+    }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val content: TextView = view.findViewById(R.id.messageContent)
-        val senderID: TextView = view.findViewById(R.id.messageSenderId)
+        val messageAvatar: ImageView = view.findViewById(R.id.messageAvatar)
         val msgDatetime: TextView = view.findViewById(R.id.messageDatetime)
     }
 
@@ -58,7 +73,7 @@ class MessagesAdapter(
         }
         if (msg.datetime.after(messages[messages.size - 1].datetime)) {
             messages.add(msg)
-            return messages.size-1
+            return messages.size - 1
         }
         for (i in 1 until messages.size - 1) {
             if ((msg.datetime.after(messages[i].datetime)) &&
@@ -84,6 +99,17 @@ class MessagesAdapter(
         val msg = messages[position]
         holder.content.text = msg.content
         holder.msgDatetime.text = msg.datetime.toString()
+        if (this.avatarsMap != null) {
+            val avatar = avatarsMap[msg.owner]
+            Glide
+                .with(context)
+                .load(avatar)
+                .apply(
+                    RequestOptions
+                        .bitmapTransform(RoundedCorners(250))
+                )
+                .into(holder.messageAvatar)
+        }
     }
 }
 
@@ -112,9 +138,24 @@ class MessagesActivity : AppCompatActivity() {
         grishaToken = intent.getStringExtra("token")
         grishaSession = intent.getStringExtra("session")
         chat_id = intent.getStringExtra("chat_id")
+
+        val isPrivate = intent.getStringExtra("is_private")
+        if (isPrivate == "true") {
+            val arrayUsers = intent.getStringArrayListExtra("array_users")
+            val arrayAvatars = intent.getStringArrayListExtra("array_avatars")
+            val usersAvatars = HashMap<String, String>()
+
+            for (i in 0 until arrayUsers.size) {
+                usersAvatars[arrayUsers[i]] = arrayAvatars[i]
+            }
+            messagesHolder = MessagesAdapter(this, messages, usersAvatars)
+        } else {
+            messagesHolder = MessagesAdapter(this, messages)
+        }
         handler = Handler()
 
-        messagesHolder = MessagesAdapter(this, messages)
+
+
         mlayoutManager = LinearLayoutManager(this)
         messagesRecycler = findViewById<RecyclerView>(R.id.messagesRecycler).apply {
             setHasFixedSize(true)
@@ -192,13 +233,72 @@ class MessagesActivity : AppCompatActivity() {
     }
 
     companion object {
-        fun startFrom(context: Context, session: String, token: String, chat_id: String) {
+        fun startFrom(
+            context: Context,
+            session: String,
+            token: String,
+            chat_id: String,
+            isPrivate: String
+        ) {
             val intent = Intent(context, MessagesActivity::class.java)
             intent.putExtra("session", session)
             intent.putExtra("token", token)
             intent.putExtra("chat_id", chat_id)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-            context.startActivity(intent)
+
+            val client = OkHttpClient.Builder().build()
+
+            val arrayUsers = ArrayList<String>()
+            val arrayAvatars = ArrayList<String>()
+
+            if (isPrivate != "null") {
+                GlobalScope.launch {
+                    val requestBody = FormBody.Builder()
+                        .add("token", token)
+                        .add("session", session)
+                        .add("chat_id", chat_id)
+                        .build()
+                    val request = Request.Builder()
+                        .url("https://salamport.newpage.xyz/api/chat_members.php")
+                        .post(requestBody)
+                        .addHeader("Content-Type", "application/x-www-form-urlencoded")
+                        .build()
+                    val responseString =
+                        withContext(Dispatchers.IO) {
+                            client.newCall(request).await().body?.string()
+                        }
+                    val jsonResponse = JSONArray(responseString)
+                    for (i in 0 until jsonResponse.length()) {
+                        val userID = jsonResponse.getString(i)
+
+                        val requestBodyForProfile = FormBody.Builder()
+                            .add("token", token)
+                            .add("session", session)
+                            .add("user_id", userID)
+                            .build()
+                        val requestForProfile = Request.Builder()
+                            .url("https://salamport.newpage.xyz/api/view_profile.php")
+                            .post(requestBodyForProfile)
+                            .addHeader("Content-Type", "application/x-www-form-urlencoded")
+                            .build()
+                        val userProfilePhoto = withContext(Dispatchers.IO) {
+                            client.newCall(requestForProfile).await().body?.string()
+                        }
+                        val userProfilePhotoString = JSONObject(userProfilePhoto).getString("photo")
+                        arrayUsers.add(jsonResponse.getString(i))
+                        arrayAvatars.add(userProfilePhotoString)
+                    }
+
+                    intent.putExtra("is_private", "true")
+                    intent.putStringArrayListExtra("array_users", arrayUsers)
+                    intent.putStringArrayListExtra("array_avatars", arrayAvatars)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    context.startActivity(intent)
+                }
+            } else {
+                intent.putExtra("is_private", "false")
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+                context.startActivity(intent)
+            }
         }
     }
 }

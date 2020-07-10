@@ -27,4 +27,6 @@
     <string name="workplace">Workplace</string>
     <string name="interests">Interests</string>
     <string name="loginWithoutVk">Login</string>
+    <string name="friends">Friends</string>
+    <string name="friendsList">Friend list</string>
 </resources>

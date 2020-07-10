@@ -27,4 +27,6 @@
     <string name="workplace">Место работы</string>
     <string name="interests">Интересы</string>
     <string name="loginWithoutVk">Войти по паролю</string>
+    <string name="friends">Друзья</string>
+    <string name="friendsList">Список друзей</string>
 </resources>
