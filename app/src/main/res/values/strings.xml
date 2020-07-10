@@ -29,4 +29,7 @@
     <string name="loginWithoutVk">Войти по паролю</string>
     <string name="friends">Друзья</string>
     <string name="friendsList">Список друзей</string>
+    <string name="searchFriends">Поиск новых друзей</string>
+    <string name="searchResults">Результаты поиска</string>
+    <string name="requestsForFriends">Заявки в друзья</string>
 </resources>

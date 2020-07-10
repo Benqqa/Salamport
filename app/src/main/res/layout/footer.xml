@@ -11,12 +11,13 @@
         android:layout_height="56dp"
         android:layout_weight="30"
         android:src="@drawable/dr"
-        android:id="@+id/goToMessages"
+        android:id="@+id/goToFriends"
         />
     <ImageView
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:layout_weight="30"
+        android:id="@+id/goToMessages"
         android:src="@drawable/soob"/>
     <ImageView
         android:layout_width="56dp"

@@ -29,4 +29,7 @@
     <string name="loginWithoutVk">Login</string>
     <string name="friends">Friends</string>
     <string name="friendsList">Friend list</string>
+    <string name="searchFriends">Find new friends</string>
+    <string name="searchResults">Results:</string>
+    <string name="requestsForFriends">REQUESTS FURR FRINES</string>
 </resources>

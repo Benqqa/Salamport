@@ -17,15 +17,76 @@
             android:paddingTop="20dp"
             android:text="@string/friends"/>
     </LinearLayout>
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="@string/friendsList"/>
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="0.5">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/searchFriends"
+            android:fontFamily="@font/baumans"
+            android:textSize="19dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/searchFriendsQuery"
+                android:layout_weight="0.8"/>
 
+            <Button
+                android:id="@+id/findUsersButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.2"
+                android:text=">" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/baumans"
+            android:text="@string/requestsForFriends"
+            android:textSize="19dp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/requestFriendRecyclerView"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/friendsList"
+            android:textSize="19dp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/friendsRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+
+        <include layout="@layout/footer" />
     </LinearLayout>
 
 

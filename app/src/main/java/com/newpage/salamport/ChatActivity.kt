@@ -84,6 +84,8 @@ class ChatAdapter(
                     .build()
                 val responseString =
                     withContext(Dispatchers.IO) { client.newCall(request).await().body?.string() }
+
+                try {
                 val jsonWithChatUsers = JSONArray(responseString)
                 val userID = jsonWithChatUsers.getString(0)
 
@@ -102,7 +104,9 @@ class ChatAdapter(
                 }
                 val userProfilePhotoString = JSONObject(userProfilePhoto).getString("photo")
 
-                loadWithGlide(userProfilePhotoString, holder)
+                loadWithGlide(userProfilePhotoString, holder) } catch (j :JSONException) {
+                    Log.e("e", "задолбало это говно")
+                }
             }
         } else {
             loadWithGlide(photo, holder)

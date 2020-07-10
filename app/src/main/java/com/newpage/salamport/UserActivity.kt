@@ -25,8 +25,6 @@ class UserActivity : Activity() {
     private lateinit var grishaToken: String
     private lateinit var grishaSession: String
 
-    private val client: OkHttpClient = OkHttpClient.Builder().build()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user)
@@ -57,7 +55,13 @@ class UserActivity : Activity() {
 
         findViewById<ImageView>(R.id.goToProfile).setOnClickListener {
             ProfileActivity.startFrom(
-                this@UserActivity, grishaSession, grishaToken
+                this@UserActivity, token = grishaToken, session = grishaSession
+            )
+        }
+
+        findViewById<ImageView>(R.id.goToFriends).setOnClickListener {
+            FriendsActivity.startFrom(
+                this@UserActivity, token = grishaToken, session = grishaSession
             )
         }
     }
