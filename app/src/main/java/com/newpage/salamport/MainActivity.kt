@@ -13,6 +13,8 @@ import com.vk.api.sdk.auth.VKAccessToken
 import com.vk.api.sdk.auth.VKAuthCallback
 import com.vk.api.sdk.auth.VKScope
 import okhttp3.*
+import org.json.JSONException
+import org.json.JSONObject
 import java.io.IOException
 import java.lang.Exception
 import java.nio.charset.StandardCharsets
@@ -25,13 +27,13 @@ class MainActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
 
+        setContentView(R.layout.activity_main)
 
         if (VK.isLoggedIn()) {
-            val tokenAndId = loadTokenAndId()
-            goToUserActivity(token = tokenAndId[0], userId = tokenAndId[1])
+            val grishaTokenAndSession = loadGrishaTokenAndSession()
+            UserActivity.startFrom(this, grishaToken = grishaTokenAndSession[0],
+                grishaSession = grishaTokenAndSession[1])
         }
-
-        setContentView(R.layout.activity_main)
 
         val button: AppCompatButton = findViewById(R.id.login)
         button.setOnClickListener {
@@ -47,23 +49,16 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        try {
-            val usernameAndPassword = loadUsernameAndPassword()
-            val buttonWithoutVk = findViewById<Button>(R.id.loginWithoutVk)
-            buttonWithoutVk.setOnClickListener {
-                if (usernameAndPassword[0] != null)
-                LoginPassword.startFrom(
-                    this, usernameAndPassword[0],
-                    usernameAndPassword[1]
-                ) else {
-                    LoginPassword.startFrom(
-                        this, "-1", "-1")
-                }
+        val loginWithoutVK: AppCompatButton = findViewById(R.id.loginWithoutVk)
+        loginWithoutVK.setOnClickListener {
+            val grishaTokenAndSession = loadGrishaTokenAndSession()
+            if ((grishaTokenAndSession[0] != "-1") &&
+                (grishaTokenAndSession[1] != "-1")) {
+                UserActivity.startFrom(this, grishaToken = grishaTokenAndSession[0],
+                grishaSession = grishaTokenAndSession[1])
+            } else {
+                LoginPassword.startFrom(this)
             }
-        } catch (e: Exception) {
-            val buttonWithoutVk = findViewById<Button>(R.id.loginWithoutVk)
-            buttonWithoutVk.setOnClickListener {
-                LoginPassword.startFrom(this) }
         }
     }
 
@@ -72,20 +67,7 @@ class MainActivity : AppCompatActivity() {
             override fun onLogin(token: VKAccessToken) {
                 Log.i("Izi",token.accessToken)
 
-                val filename = "token"; val emailFilename = "email"; val phoneFilename = "phone"
-                val content = token.accessToken
-                val email = token.email
-                val userIdFilename = "id"
-
-                this@MainActivity.openFileOutput(filename, Context.MODE_PRIVATE).use {
-                    it.write(content.toByteArray(charset = StandardCharsets.UTF_8))
-                    it.flush()
-                }
-                this@MainActivity.openFileOutput(userIdFilename, Context.MODE_PRIVATE).use {
-                    it.write(token.userId.toString().toByteArray(StandardCharsets.UTF_8))
-                    it.flush()
-                }
-                goToUserActivity(token = token.accessToken, userId = token.userId.toString())
+                loginThroughVK(token = token.accessToken, vk_id = token.userId.toString())
             }
 
             override fun onLoginFailed(errorCode: Int) {
@@ -97,25 +79,24 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun loadTokenAndId(): ArrayList<String> {
+    private fun loadGrishaTokenAndSession(): ArrayList<String> {
         val a = ArrayList<String>()
-        a.add(this.openFileInput("token").bufferedReader().readLine())
-        a.add(this.openFileInput("id").bufferedReader().readLine())
-        return a
+        return try {
+            a.add(this.openFileInput("token").bufferedReader().readLine())
+            a.add(this.openFileInput("session").bufferedReader().readLine())
+            a
+        } catch (e : Exception) {
+            a.add("-1"); a.add("-1")
+            a
+        }
     }
 
-    private fun loadUsernameAndPassword(): ArrayList<String> {
-        val a = ArrayList<String>()
-        a.add(this.openFileInput("username").bufferedReader().readLine())
-        a.add(this.openFileInput("password").bufferedReader().readLine())
-        return a
-    }
 
-    private fun goToUserActivity(token: String, userId: String) {
+    private fun loginThroughVK(vk_id: String, token: String) {
         val handler = Handler()
         handler.postDelayed(Runnable {
             val requestBody = FormBody.Builder()
-                .add("vk_id", userId)
+                .add("vk_id", vk_id)
                 .add("token", token)
                 .build()
 
@@ -127,7 +108,18 @@ class MainActivity : AppCompatActivity() {
             client.newCall(request).enqueue(object : Callback {
                 override fun onResponse(call: Call, response: Response) {
                     val resBody = response.body!!.string()
-                    UserActivity.startFrom(this@MainActivity, message = resBody)
+                    try {
+                        val jsonResponse = JSONObject(resBody)
+                        val grishaSession = jsonResponse.getString("session")
+                        val grishaToken = jsonResponse.getString("token")
+                        saveSessionAndToken(grishaToken, grishaSession)
+                        UserActivity.startFrom(
+                            this@MainActivity,
+                            grishaToken, grishaSession
+                        )
+                    } catch (j: JSONException) {
+                        Log.e("error", "invalid vk user")
+                    }
                 }
 
                 override fun onFailure(call: Call, e: IOException) {
@@ -136,6 +128,17 @@ class MainActivity : AppCompatActivity() {
             })
         }, 1000)
 
+    }
+
+    private fun saveSessionAndToken(token: String, session: String) {
+        this.openFileOutput("session", Context.MODE_PRIVATE).use {
+            it.write(session.toByteArray(charset = StandardCharsets.UTF_8))
+            it.flush()
+        }
+        this.openFileOutput("token", Context.MODE_PRIVATE).use {
+            it.write(token.toByteArray(StandardCharsets.UTF_8))
+            it.flush()
+        }
     }
 
     companion object {

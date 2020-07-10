@@ -162,7 +162,8 @@ class ChatActivity : AppCompatActivity() {
                 val responseJSON = JSONArray(responseString.body?.string())
                 runOnUiThread { renderChatList(responseJSON) }
             } catch (j: JSONException) {
-                UserActivity.startFrom(this@ChatActivity)
+                UserActivity.startFrom(this@ChatActivity, grishaToken,
+                grishaSession)
             }
         }
     }

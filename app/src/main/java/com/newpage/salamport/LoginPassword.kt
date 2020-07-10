@@ -20,17 +20,11 @@ import java.nio.charset.StandardCharsets
 
 class LoginPassword : AppCompatActivity() {
 
-    private lateinit var username: String
-    private lateinit var password: String
-
     private val client = OkHttpClient.Builder().build()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login_password)
-
-        username = intent.getStringExtra("username")
-        password = intent.getStringExtra("password")
 
         findViewById<Button>(R.id.submitLogin).setOnClickListener {
             GlobalScope.launch {
@@ -49,60 +43,36 @@ class LoginPassword : AppCompatActivity() {
                 try {
                     val string = responseString.body?.string()
                     val mmJSON = JSONObject(string)
-                    saveLoginAndPassword(findViewById<EditText>(R.id.usernameEdit).text.toString(),
-                        findViewById<EditText>(R.id.passwordEdit).text.toString())
-                    UserActivity.startFrom(this@LoginPassword, string)
+
+                    val grishaToken = mmJSON.getString("token")
+                    val grishaSession = mmJSON.getString("session")
+                    saveTokenAndSession(grishaToken, grishaSession)
+                    UserActivity.startFrom(this@LoginPassword, grishaToken, grishaSession)
                 } catch (jex: JSONException) {
                     MainActivity.startFrom(this@LoginPassword)
                 }
             }
         }
 
-        if (!((username.equals("-1")) && (password.equals("-1")))) {
-            GlobalScope.launch {
-                val requestBody = FormBody.Builder()
-                    .add("login", username)
-                    .add("password", password)
-                    .build()
-                val request = Request.Builder()
-                    .url("https://salamport.newpage.xyz/api/normal_auth.php")
-                    .post(requestBody)
-                    .addHeader("Content-Type", "application/x-www-form-urlencoded")
-                    .build()
-                val responseString = withContext(Dispatchers.IO) {
-                    client.newCall(request).await()
-                }
-                try {
-                    val string = responseString.body?.string()
-                    val mmJSON = JSONObject(string)
-                    saveLoginAndPassword(findViewById<EditText>(R.id.usernameEdit).text.toString(),
-                        findViewById<EditText>(R.id.passwordEdit).text.toString())
-                    UserActivity.startFrom(this@LoginPassword, string)
-                } catch (jex: JSONException) {
-                    MainActivity.startFrom(this@LoginPassword)
-                }
-            }
-        }
     }
 
-    private fun saveLoginAndPassword(username: String, password: String) {
-        this.openFileOutput("username", Context.MODE_PRIVATE).use {
-            it.write(username.toByteArray(charset = StandardCharsets.UTF_8))
+    private fun saveTokenAndSession(token: String, session: String) {
+        this.openFileOutput("session", Context.MODE_PRIVATE).use {
+            it.write(session.toByteArray(charset = StandardCharsets.UTF_8))
             it.flush()
         }
-        this.openFileOutput("password", Context.MODE_PRIVATE).use {
-            it.write(password.toByteArray(StandardCharsets.UTF_8))
+        this.openFileOutput("token", Context.MODE_PRIVATE).use {
+            it.write(token.toByteArray(StandardCharsets.UTF_8))
             it.flush()
         }
     }
 
     companion object {
-        fun startFrom(context: Context, username: String = "-1", password: String = "-1") {
+        fun startFrom(context: Context) {
             val intent = Intent(context, LoginPassword::class.java)
-            intent.putExtra("username", username)
-            intent.putExtra("password", password)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
             context.startActivity(intent)
         }
+
     }
 }
