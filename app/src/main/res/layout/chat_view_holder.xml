@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/chatListAvatar"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:layout_weight="0.3" />
+
+    <TextView
+        android:id="@+id/chatListName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5" />
+
+    <ImageView
+        android:id="@+id/chatListButton"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:layout_weight="0.2"
+        android:src="@drawable/rab" />
+</LinearLayout>

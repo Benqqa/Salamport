@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Salamport+</string>
+    <string name="login">Login</string>
+    <string name="logout">Logout</string>
+    <string name="profile">Profile</string>
+    <string name="meet">Meetings</string>
+    <string name="games">Play</string>
+    <string name="media">Media</string>
+    <string name="services">Services</string>
+    <string name="work">Work</string>
+    <string name="vacation">Vacation</string>
+    <string name="personal_data">Personal data</string>
+    <string name="name">Name</string>
+    <string name="surname">Surname</string>
+    <string name="patronymic">Patronymic</string>
+    <string name="bdate">Bdate</string>
+    <string name="sex">Sex</string>
+    <string name="hometown">Hometown</string>
+    <string name="town">City</string>
+    <string name="contact">Contacts</string>
+    <string name="phone">Phone</string>
+    <string name="email">E-Mail</string>
+    <string name="vk">VK</string>
+    <string name="about">About</string>
+    <string name="study">Study</string>
+    <string name="workplace">Workplace</string>
+    <string name="interests">Interests</string>
+    <string name="loginWithoutVk">Login</string>
+</resources>

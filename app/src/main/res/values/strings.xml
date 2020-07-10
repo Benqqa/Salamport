@@ -1,0 +1,30 @@
+<resources>
+    <integer name="com_vk_sdk_AppId">7533338</integer>
+    <string name="app_name">Salamport+</string>
+    <string name="login">VK</string>
+    <string name="logout">Logout</string>
+    <string name="profile">Профиль</string>
+    <string name="meet">Знакомства</string>
+    <string name="games">Развлечения</string>
+    <string name="media">Медиа</string>
+    <string name="services">Услуги</string>
+    <string name="work">Работа</string>
+    <string name="vacation">Жилье</string>
+    <string name="personal_data">Личные данные</string>
+    <string name="name">Имя</string>
+    <string name="surname">Фамилия</string>
+    <string name="patronymic">Отчество</string>
+    <string name="bdate">Дата рождения</string>
+    <string name="sex">Пол</string>
+    <string name="hometown">Родной город</string>
+    <string name="town">Город проживания</string>
+    <string name="contact">Контактная информация</string>
+    <string name="phone">Телефон</string>
+    <string name="email">Электронная почта</string>
+    <string name="vk">ВКонтакте</string>
+    <string name="about">О себе</string>
+    <string name="study">Место учебы</string>
+    <string name="workplace">Место работы</string>
+    <string name="interests">Интересы</string>
+    <string name="loginWithoutVk">Войти по паролю</string>
+</resources>
