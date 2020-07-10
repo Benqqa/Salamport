@@ -36,11 +36,12 @@ data class Chat(
     val id: String,
     val name: String,
     val photo: String,
+    val isPrivate: String,
     val members: ArrayList<Int>? = null
 )
 
 class ChatAdapter(private val context: Context, private val chats: ArrayList<Chat>,
-private val session: String, private val token: String) :
+private val session: String, private val token: String, private val client: OkHttpClient) :
     RecyclerView.Adapter<ChatAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -65,19 +66,61 @@ private val session: String, private val token: String) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val chat = chats[position]
         holder.text.text = chat.name
+        val photo = chat.photo
+
+        if (chat.isPrivate != "null") {
+            GlobalScope.launch {
+                val requestBody = FormBody.Builder()
+                    .add("token", token)
+                    .add("session", session)
+                    .add("chat_id", chat.id)
+                    .build()
+                val request = Request.Builder()
+                    .url("https://salamport.newpage.xyz/api/chat_members.php")
+                    .post(requestBody)
+                    .addHeader("Content-Type", "application/x-www-form-urlencoded")
+                    .build()
+                val responseString =
+                    withContext(Dispatchers.IO) { client.newCall(request).await().body?.string() }
+                val jsonWithChatUsers = JSONArray(responseString)
+                val userID = jsonWithChatUsers[0].toString()
+
+                val requestBodyForProfile = FormBody.Builder()
+                    .add("token", token)
+                    .add("session", session)
+                    .add("user_id", userID)
+                    .build()
+                val requestForProfile = Request.Builder()
+                    .url("https://salamport.newpage.xyz/api/view_profle.php")
+                    .post(requestBodyForProfile)
+                    .addHeader("Content-Type", "application/x-www-form-urlencoded")
+                    .build()
+                val userProfilePhoto = withContext(Dispatchers.IO) {
+                    client.newCall(requestForProfile).await().body?.string()
+                }
+                val userProfilePhotoString = JSONObject(userProfilePhoto).getString("photo")
+
+                loadWithGlide(userProfilePhotoString, holder)
+            }
+        } else {
+            loadWithGlide(photo, holder)
+        }
         holder.goToMessages.setOnClickListener {
             MessagesActivity.startFrom(context, session, token, chat.id)
         }
+
+
+    }
+    private fun loadWithGlide(photo: String, holder: ViewHolder) {
         Glide
             .with(context)
-            .load(chat.photo)
+            .load(photo)
             .apply(
                 RequestOptions
                     .bitmapTransform(RoundedCorners(250))
             )
             .into(holder.photo)
     }
-
 }
 
 class ChatActivity : AppCompatActivity() {
@@ -98,11 +141,10 @@ class ChatActivity : AppCompatActivity() {
 
         grishaToken = intent.getStringExtra("token")
         grishaSession = intent.getStringExtra("session")
+
         setContentView(R.layout.activity_chat)
 
-
-
-        chatAdapter = ChatAdapter(this, chats, grishaSession, grishaToken)
+        chatAdapter = ChatAdapter(this, chats, grishaSession, grishaToken, client)
         mlayoutManager = LinearLayoutManager(this)
         recyclerView = findViewById<RecyclerView>(R.id.chatContainer).apply {
             setHasFixedSize(true)
@@ -188,8 +230,8 @@ class ChatActivity : AppCompatActivity() {
                 try {
                     val chat = JSONObject(responseString.body?.string())
                     val newChat = Chat(
-                        chat.getString("id"),
-                        chat.getString("name"), chat.getString("photo")
+                        chat.getString("id"), chat.getString("name"),
+                        chat.getString("photo"), chat.getString("private")
                     )
                     this@ChatActivity.chatAdapter.addChat(newChat)
                     runOnUiThread {

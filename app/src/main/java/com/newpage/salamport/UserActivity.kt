@@ -8,6 +8,15 @@ import android.transition.TransitionInflater
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import com.vk.api.sdk.VK
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import okhttp3.FormBody
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import org.json.JSONObject
+import ru.gildor.coroutines.okhttp.await
 import java.nio.charset.StandardCharsets
 
 
@@ -15,6 +24,8 @@ class UserActivity : Activity() {
 
     private lateinit var grishaToken: String
     private lateinit var grishaSession: String
+
+    private val client: OkHttpClient = OkHttpClient.Builder().build()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
