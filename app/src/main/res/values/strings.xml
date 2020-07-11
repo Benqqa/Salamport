@@ -7,9 +7,10 @@
     <string name="meet">Знакомства</string>
     <string name="games">Развлечения</string>
     <string name="media">Медиа</string>
-    <string name="services">Услуги</string>
+    <string name="spravka">Справочник</string>
+    <string name="medicine" translatable="false">Медицина</string>
+    <string name="service" translatable="false">Сервисы</string>
     <string name="work">Работа</string>
-    <string name="vacation">Жилье</string>
     <string name="personal_data">Личные данные</string>
     <string name="name">Имя</string>
     <string name="surname">Фамилия</string>
@@ -17,10 +18,10 @@
     <string name="bdate">Дата рождения</string>
     <string name="sex">Пол</string>
     <string name="hometown">Родной город</string>
-    <string name="town">Город проживания</string>
+    <string name="town">Город</string>
     <string name="contact">Контактная информация</string>
     <string name="phone">Телефон</string>
-    <string name="email">Электронная почта</string>
+    <string name="email">E-Mail</string>
     <string name="vk">ВКонтакте</string>
     <string name="about">О себе</string>
     <string name="study">Место учебы</string>
@@ -31,7 +32,7 @@
     <string name="friendsList">Список друзей</string>
     <string name="searchFriends">Поиск новых друзей</string>
     <string name="searchResults">Результаты поиска</string>
-    <string name="requestsForFriends">Заявки в друзья</string>
+    <string name="requestsForFriends">Заявки</string>
     <string name="places">Заведения</string>
     <string name="advertisements">Объявления</string>
     <string name="tinder">Поиск соседа</string>
@@ -47,10 +48,19 @@
     <string name="range">Расстояние</string>
     <string name="language">Язык</string>
     <string name="ru">Русский</string>
-    <string name="az">Азербайждайский</string>
+    <string name="az">Армянский</string>
     <string name="start">Начать</string>
     <string name="NAIDITE">Найдите себе новых знакомых или вторую половинку</string>
     <string name="PROVERTE">Проверьте отклики на взаимный интерес</string>
     <string name="OTKlIKI">Отклики</string>
     <string name="ISHU">Ищу знакомства</string>
+    <string name="muzika">Музыка</string>
+    <string name="video">Видео</string>
+    <string name="notification_channel_name">music</string>
+    <string name="pause">Пауза</string>
+    <string name="play">Стар</string>
+    <string name="stop">Стоп</string>
+    <string name="OTKLIKI">Ваши отклики</string>
+    <string name="completed_tinder">Закончились предложения</string>
+    <string name="chats">Чаты</string>
 </resources>

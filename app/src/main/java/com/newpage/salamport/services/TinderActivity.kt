@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -95,7 +96,9 @@ class TinderActivity : AppCompatActivity() {
                     )
                     datings.add(user)
                 }
-                renderDatings()
+                runOnUiThread {
+                    renderDatings()
+                }
             } catch (e: Exception) {
                 Log.e("e", "ee")
             }
@@ -107,11 +110,41 @@ class TinderActivity : AppCompatActivity() {
         val imgView = findViewById<ImageView>(R.id.imageOfT).setOnTouchListener(
             object : GestureHandler(this@TinderActivity) {
                 override fun onSwipeRight() {
+                    GlobalScope.launch {
+                        val requestBody = FormBody.Builder()
+                            .add("session", session)
+                            .add("token", token)
+                            .add("query", "true")
+                            .build()
+                        val request = Request.Builder()
+                            .url("https://salamport.newpage.xyz/api/confirm_match.php")
+                            .post(requestBody)
+                            .addHeader("Content-Type", "application/x-www-form-urlencoded")
+                            .build()
+                        val responseString = withContext(Dispatchers.IO) {
+                            client.newCall(request).await()
+                        }
+                    }
                     currentIndex++
                     renderDatings()
                 }
 
                 override fun onSwipeLeft() {
+                    GlobalScope.launch {
+                        val requestBody = FormBody.Builder()
+                            .add("session", session)
+                            .add("token", token)
+                            .add("query", "false")
+                            .build()
+                        val request = Request.Builder()
+                            .url("https://salamport.newpage.xyz/api/confirm_match.php")
+                            .post(requestBody)
+                            .addHeader("Content-Type", "application/x-www-form-urlencoded")
+                            .build()
+                        val responseString = withContext(Dispatchers.IO) {
+                            client.newCall(request).await()
+                        }
+                    }
                     currentIndex++
                     renderDatings()
                 }
@@ -120,12 +153,19 @@ class TinderActivity : AppCompatActivity() {
     }
 
     private fun renderDatings() {
-        val imgView = findViewById<ImageView>(R.id.imageOfT)
-        Glide.with(this)
-            .load(datings[currentIndex].photo)
-            .into(imgView)
         val txt = findViewById<TextView>(R.id.textTINDER)
-        txt.text = datings[currentIndex].name
+        val imgView = findViewById<ImageView>(R.id.imageOfT)
+
+        if (currentIndex == datings.size) {
+            txt.text = getString(R.string.completed_tinder)
+        } else {
+
+            Glide.with(this)
+                .load(datings[currentIndex].photo)
+                .into(imgView)
+
+            txt.text = datings[currentIndex].name
+        }
     }
 
     companion object {

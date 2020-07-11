@@ -6,28 +6,19 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:background="@drawable/gradient">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/baumans"
-            android:paddingStart="40dp"
-            android:paddingTop="20dp"
-            android:text="@string/chats"
-            android:textSize="20dp" />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/chatListCreateChat"
+        <Button
+            android:id="@+id/loadMusicToServer"
             android:layout_width="wrap_content"
-            android:src="@drawable/ic_plyus_01"
             android:layout_height="wrap_content"
-            android:text="new chat" />
+            android:text="+" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/sendMusicToServer"
+            android:text=">" />
     </LinearLayout>
 
     <LinearLayout
@@ -36,14 +27,14 @@
         android:layout_weight="0.9">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/chatContainer"
+            android:id="@+id/musicContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp">
+        android:layout_height="56dp">
 
         <include layout="@layout/footer" />
     </LinearLayout>

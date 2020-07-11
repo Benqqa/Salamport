@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:layout_width="match_parent" android:layout_height="match_parent"
+<LinearLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="@drawable/yascheritsafon"
     android:orientation="vertical">
@@ -19,7 +20,6 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
             android:fontFamily="@font/baumans"
             android:text="@string/NAIDITE"
             android:textAlignment="center" />
@@ -28,9 +28,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:id="@+id/goToTinderFilter"
+            android:id="@+id/goToMusicList"
             android:background="@color/zhelto"
-            android:text="@string/start" />
+            android:text="@string/muzika" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -43,29 +43,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/orangevo"
-            android:id="@+id/OTKLIKI"
             android:fontFamily="@font/baumans"
-            android:text="@string/OTKlIKI" />
+            android:text="@string/video" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/baumans"
-            android:text="@string/ISHU"
-            android:textAlignment="center" />
-            <androidx.appcompat.widget.SwitchCompat
-                android:layout_width="wrap_content"
-                android:id="@+id/SWITCH"
-                android:layout_height="wrap_content"/>
-        </LinearLayout>
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="96dp">
-        <include layout="@layout/footer"/>
+
+        <include layout="@layout/footer" />
     </LinearLayout>
 </LinearLayout>

@@ -11,10 +11,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -31,6 +28,7 @@ import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import ru.gildor.coroutines.okhttp.await
+import java.text.SimpleDateFormat
 
 data class Chat(
     val id: String,
@@ -49,7 +47,8 @@ class ChatAdapter(
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val photo: ImageView = view.findViewById(R.id.chatListAvatar)
         val text: TextView = view.findViewById(R.id.chatListName)
-        val goToMessages: ImageView = view.findViewById(R.id.chatListButton)
+        val goToMessages: LinearLayout = view.findViewById(R.id.chatListButton)
+        val lastMessage: TextView = view.findViewById(R.id.chatListLastMessage)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -70,6 +69,33 @@ class ChatAdapter(
         holder.text.text = chat.name
         val photo = chat.photo
 
+
+        GlobalScope.launch {
+            val requestBody = FormBody.Builder()
+                .add("session", session)
+                .add("token", token)
+                .add("chat_id", chat.id)
+                .build()
+            val request = Request.Builder()
+                .url("https://salamport.newpage.xyz/api/chat_messages.php")
+                .post(requestBody)
+                .addHeader("Content-Type", "application/x-www-form-urlencoded")
+                .build()
+            val response = withContext(Dispatchers.IO) { client.newCall(request).await() }
+
+
+            try {
+                val messagesArray = JSONArray(response.body?.string())
+                val lastMessage = messagesArray
+                    .getJSONObject(0)
+                    .getString("text")
+                setLastMessage(lastMessage, holder)
+            } catch (j: JSONException) {
+                Log.e("e", "sorry")
+            }
+        }
+
+
         if (chat.isPrivate != "null") {
             GlobalScope.launch {
                 val requestBody = FormBody.Builder()
@@ -86,25 +112,28 @@ class ChatAdapter(
                     withContext(Dispatchers.IO) { client.newCall(request).await().body?.string() }
 
                 try {
-                val jsonWithChatUsers = JSONArray(responseString)
-                val userID = jsonWithChatUsers.getString(0)
+                    val jsonWithChatUsers = JSONArray(responseString)
+                    val userID = jsonWithChatUsers.getString(0)
 
-                val requestBodyForProfile = FormBody.Builder()
-                    .add("token", token)
-                    .add("session", session)
-                    .add("user_id", userID)
-                    .build()
-                val requestForProfile = Request.Builder()
-                    .url("https://salamport.newpage.xyz/api/view_profile.php")
-                    .post(requestBodyForProfile)
-                    .addHeader("Content-Type", "application/x-www-form-urlencoded")
-                    .build()
-                val userProfilePhoto = withContext(Dispatchers.IO) {
-                    client.newCall(requestForProfile).await().body?.string()
-                }
-                val userProfilePhotoString = JSONObject(userProfilePhoto).getString("photo")
+                    val requestBodyForProfile = FormBody.Builder()
+                        .add("token", token)
+                        .add("session", session)
+                        .add("user_id", userID)
+                        .build()
+                    val requestForProfile = Request.Builder()
+                        .url("https://salamport.newpage.xyz/api/view_profile.php")
+                        .post(requestBodyForProfile)
+                        .addHeader("Content-Type", "application/x-www-form-urlencoded")
+                        .build()
+                    val userProfilePhoto = withContext(Dispatchers.IO) {
+                        client.newCall(requestForProfile).await().body?.string()
+                    }
+                    val userProfilePhotoString = JSONObject(userProfilePhoto).getString("photo")
 
-                loadWithGlide(userProfilePhotoString, holder) } catch (j :JSONException) {
+                    val username = JSONObject(userProfilePhoto).getString("name")
+                    loadWithGlide(userProfilePhotoString, holder)
+                    loadUserName(username, holder)
+                } catch (j: JSONException) {
                     Log.e("e", "задолбало это говно")
                 }
             }
@@ -113,6 +142,19 @@ class ChatAdapter(
         }
         holder.goToMessages.setOnClickListener {
             MessagesActivity.startFrom(context, session, token, chat.id, chat.isPrivate)
+        }
+    }
+
+    private fun setLastMessage(lastMessage: String, holder: ViewHolder) {
+        context.runOnUiThread {
+            if (lastMessage.length < 30) holder.lastMessage.text = lastMessage else
+                holder.lastMessage.text = lastMessage.substring(30) + "..."
+        }
+    }
+
+    private fun loadUserName(username: String, holder: ViewHolder) {
+        context.runOnUiThread {
+            holder.text.text = username
         }
     }
 
@@ -139,6 +181,7 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var chatAdapter: ChatAdapter
     private lateinit var mlayoutManager: RecyclerView.LayoutManager
 
+
     private val chats = ArrayList<Chat>()
 
     private val client = OkHttpClient.Builder().build()
@@ -160,7 +203,7 @@ class ChatActivity : AppCompatActivity() {
         }
         recyclerView.adapter = chatAdapter
 
-        findViewById<Button>(R.id.chatListCreateChat).setOnClickListener {
+        findViewById<ImageView>(R.id.chatListCreateChat).setOnClickListener {
             val li = LayoutInflater.from(this)
             val promptsView: View = li.inflate(R.layout.prompt, null)
 

@@ -2,16 +2,15 @@ package com.newpage.salamport
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -39,16 +38,16 @@ class UsersSearchAdapter(
     private val client: OkHttpClient = OkHttpClient.Builder().build()
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val nameAndUsername: TextView = view.findViewById(R.id.searchNameAndUsername)
-        val friendAvatar: ImageView = view.findViewById(R.id.searchAvatar)
-        val friendToChat: Button = view.findViewById(R.id.searchToChat)
+        val nameAndUsername: TextView = view.findViewById(R.id.friendNameAndUsername)
+        val friendAvatar: ImageView = view.findViewById(R.id.friendAvatar)
+        val friendToChat: ImageView = view.findViewById(R.id.friendToChat)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(context)
         return ViewHolder(
             inflater.inflate(
-                R.layout.search_view_holder,
+                R.layout.request_friends_holder,
                 parent,
                 false
             )
@@ -85,6 +84,8 @@ class UsersSearchAdapter(
                     .build()
                 val response =
                     withContext(Dispatchers.IO) { client.newCall(request).await().body?.string() }
+                if (response != "false")
+                    Toast.makeText(context, "Заявка отправлена", Toast.LENGTH_SHORT).show()
             }
         }
     }

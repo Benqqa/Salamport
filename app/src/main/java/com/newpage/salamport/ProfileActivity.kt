@@ -38,7 +38,9 @@ data class UserProfile(var id: String, var name: String,
                        var native_city: String?,
                        var job: String?,
                        var photo: String?,
-                       var study: String?
+                       var study: String?,
+                       var email: String?,
+                       var interest: String?
 )
 
 class ClickListenerForProfile(val context: ProfileActivity, val thing:String) : View.OnClickListener{
@@ -60,8 +62,12 @@ class ClickListenerForProfile(val context: ProfileActivity, val thing:String) : 
                     "middlename" -> context.userProfile.middlename = userInput.text.toString()
                     "sex" -> context.userProfile.sex = userInput.text.toString()
                     "city" -> context.userProfile.city = userInput.text.toString()
-                    "native_city" -> context.userProfile.native_city = userInput.text.toString()
+                    "bdate" -> context.userProfile.birthdate = userInput.text.toString()
                     "job" -> context.userProfile.job = userInput.text.toString()
+                    "mail" -> context.userProfile.email = userInput.text.toString()
+                    "study" -> context.userProfile.study = userInput.text.toString()
+                    "bio" -> context.userProfile.interest = userInput.text.toString()
+                    "phone" -> context.userProfile.phone = userInput.text.toString()
                 }
                 context.applyChangesInProfile()
                 context.renderUserProfile(context.userProfile)
@@ -99,20 +105,49 @@ class ProfileActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.profileName).setOnClickListener(ClickListenerForProfile(this, "name"))
         findViewById<TextView>(R.id.profileSurname).setOnClickListener(ClickListenerForProfile(this, "surname"))
         findViewById<TextView>(R.id.profilePatronymic).setOnClickListener(ClickListenerForProfile(this, "middlename"))
+        findViewById<TextView>(R.id.profilebdate).setOnClickListener(
+            ClickListenerForProfile(
+                this,
+                "bdate"
+            )
+        )
         findViewById<TextView>(R.id.profileSex).setOnClickListener(ClickListenerForProfile(this, "sex"))
         findViewById<TextView>(R.id.profileCity).setOnClickListener(ClickListenerForProfile(this, "city"))
         findViewById<TextView>(R.id.profileWork).setOnClickListener(ClickListenerForProfile(this, "job"))
+        findViewById<TextView>(R.id.profileEmail).setOnClickListener(
+            ClickListenerForProfile(
+                this,
+                "mail"
+            )
+        )
+        findViewById<TextView>(R.id.profilePhone).setOnClickListener(
+            ClickListenerForProfile(
+                this,
+                "phone"
+            )
+        )
         findViewById<TextView>(R.id.profileStudy).setOnClickListener(ClickListenerForProfile(this, "study"))
-
+        findViewById<TextView>(R.id.profileInterest).setOnClickListener(
+            ClickListenerForProfile(
+                this,
+                "bio"
+            )
+        )
     }
 
     fun renderUserProfile(user: UserProfile) {
         findViewById<TextView>(R.id.profileName).text = user.name
         findViewById<TextView>(R.id.profileSurname).text = user.surname
         findViewById<TextView>(R.id.profilePatronymic).text = user.middlename
+        findViewById<TextView>(R.id.profilebdate).text = user.birthdate
         findViewById<TextView>(R.id.profileCity).text = user.city
         findViewById<TextView>(R.id.profilehomeTown).text = user.native_city
-        findViewById<TextView>(R.id.profileSex).text = user.sex
+        findViewById<TextView>(R.id.profileSex).text = if (user.sex == "1") "M" else "F"
+        findViewById<TextView>(R.id.profilehomeTown).text = user.native_city
+        findViewById<TextView>(R.id.profileCity).text = user.city
+        findViewById<TextView>(R.id.profilePhone).text = user.phone
+        findViewById<TextView>(R.id.profileEmail).text = user.email
+        findViewById<TextView>(R.id.profileInterest).text = user.interest
     }
 
     private fun updateUserProfileFromServer() {
@@ -149,9 +184,12 @@ class ProfileActivity : AppCompatActivity() {
                     val study = responseJSON.getString("study")
                     val job = responseJSON.getString("job")
                     val photo = responseJSON.getString("photo")
+                    val email = responseJSON.getString("email")
+                    val interests = responseJSON.getString("bio")
 
                     userProfile = UserProfile(id, name, surname, middlename, birthdate, phone,
-                        country, sex, city, native_city, job, photo, study)
+                        country, sex, city, native_city, job, photo, study, email, interests
+                    )
 
                     renderUserProfile(userProfile)
                 }
@@ -177,8 +215,8 @@ class ProfileActivity : AppCompatActivity() {
                 .add("native_city", userProfile.native_city.toString())
                 .add("study", userProfile.study.toString())
                 .add("job", userProfile.job.toString())
-                .add("email", "asf")
-                .add("bio", "asd")
+                .add("email", userProfile.email.toString())
+                .add("bio", userProfile.interest.toString())
                 .build()
 
             val request = Request.Builder()

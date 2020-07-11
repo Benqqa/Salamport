@@ -1,48 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:orientation="vertical"
+<LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.3"
-        android:paddingTop="40dp"
-        android:gravity="center_horizontal"
         android:background="@drawable/gradient"
-        android:orientation="vertical">
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingTop="40dp">
 
         <ImageView
             android:id="@+id/profileAvatar"
             android:layout_width="130dp"
             android:layout_height="130dp" />
+
+        <ImageView
+            android:id="@+id/karandash1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_karandashik_01" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="6.5"
+        android:layout_height="match_parent"
+        android:layout_weight="0.3"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/persdata"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/baumans"
-            android:paddingStart="15dp"
-            android:text="@string/personal_data"
-            android:textSize="18sp" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/persdata"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/baumans"
+                android:text="@string/personal_data"
+                android:textSize="18sp" />
+
+            <ImageView
+                android:id="@+id/karandash2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="150dp"
+                android:paddingTop="20dp"
+                app:srcCompat="@drawable/ic_karandashik_01" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.1"
-            android:orientation="horizontal"
-            android:paddingStart="40dp">
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="20dp"
                 android:layout_weight="0.2"
                 android:text="@string/name" />
 
@@ -50,14 +72,14 @@
                 android:id="@+id/divider"
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.5" />
+                android:layout_weight="0.2" />
 
             <TextView
                 android:id="@+id/profileName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.3"
-                android:textAlignment="center" />
+                android:textAlignment="viewStart" />
 
         </LinearLayout>
 
@@ -65,12 +87,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.1"
-            android:orientation="horizontal"
-            android:paddingStart="40dp">
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="20dp"
                 android:layout_weight="0.2"
                 android:text="@string/surname" />
 
@@ -78,25 +100,27 @@
                 android:id="@+id/divider2"
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.5" />
+                android:layout_weight="0.2" />
 
             <TextView
                 android:id="@+id/profileSurname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.3" />
+                android:layout_weight="0.3"
+                android:textAlignment="viewStart"
+                android:translationX="-10dp" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.1"
-            android:orientation="horizontal"
-            android:paddingStart="40dp">
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="20dp"
                 android:layout_weight="0.2"
                 android:text="@string/patronymic" />
 
@@ -104,10 +128,168 @@
                 android:id="@+id/divider3"
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.5" />
+                android:layout_weight="0.2" />
 
             <TextView
                 android:id="@+id/profilePatronymic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="viewStart"
+                android:layout_weight="0.3" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="9dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="20dp"
+                android:layout_weight="0.2"
+                android:text="@string/bdate" />
+
+            <View
+                android:id="@+id/divider4"
+                android:layout_width="56dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.2" />
+
+            <TextView
+                android:id="@+id/profilebdate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="viewStart"
+                android:layout_weight="0.3" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="20dp"
+                android:layout_weight="0.2"
+                android:text="@string/sex" />
+
+            <View
+                android:id="@+id/divider5"
+                android:layout_width="65dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5" />
+
+            <TextView
+                android:id="@+id/profileSex"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="viewStart"
+                android:layout_weight="0.3" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="44dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="20dp"
+                android:layout_weight="0.2"
+                android:text="@string/hometown" />
+
+            <View
+                android:id="@+id/divider6"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5" />
+
+            <TextView
+                android:id="@+id/profilehomeTown"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="viewStart"
+                android:layout_weight="0.3" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="70dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="20dp"
+                android:layout_weight="0.2"
+                android:text="@string/town" />
+
+            <View
+                android:id="@+id/divider7"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5" />
+
+            <TextView
+                android:id="@+id/profileCity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:textAlignment="viewStart"
+                android:translationX="-10dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:fontFamily="@font/baumans"
+                android:text="@string/contact"
+                android:textSize="18sp" />
+
+            <ImageView
+                android:id="@+id/karandash3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="100dp"
+                app:srcCompat="@drawable/ic_karandashik_01" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="20dp"
+                android:layout_weight="0.2"
+                android:text="@string/phone" />
+
+            <View
+                android:id="@+id/divider8"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5" />
+
+            <TextView
+                android:id="@+id/profilePhone"
+                android:textAlignment="viewStart"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.3" />
@@ -117,220 +299,115 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.1"
-            android:orientation="horizontal"
-            android:paddingStart="40dp">
+            android:orientation="horizontal">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/bdate" />
-
-            <View
-                android:id="@+id/divider4"
-                android:layout_width="1dp"
+                android:layout_width="72dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1" />
-
-            <TextView
-                android:id="@+id/profilebdate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.1"
-            android:orientation="horizontal"
-            android:paddingStart="40dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/sex" />
-
-            <View
-                android:id="@+id/divider5"
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
-
-            <TextView
-                android:id="@+id/profileSex"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.1"
-            android:orientation="horizontal"
-            android:paddingStart="40dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/hometown" />
-
-            <View
-                android:id="@+id/divider6"
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
-
-            <TextView
-                android:id="@+id/profilehomeTown"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.1"
-            android:orientation="horizontal"
-            android:paddingStart="40dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/town" />
-
-            <View
-                android:id="@+id/divider7"
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
-
-            <TextView
-                android:id="@+id/profileCity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/baumans"
-            android:paddingStart="15dp"
-            android:text="@string/contact"
-            android:textSize="18sp" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.1"
-            android:orientation="horizontal"
-            android:paddingStart="40dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/phone" />
-
-            <View
-                android:id="@+id/divider8"
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
-
-            <TextView
-                android:id="@+id/profilePhone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.1"
-            android:orientation="horizontal"
-            android:paddingStart="40dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_weight="0.2"
                 android:text="@string/email" />
 
             <View
                 android:id="@+id/divider9"
-                android:layout_width="1dp"
+                android:layout_width="6dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
 
             <TextView
                 android:id="@+id/profileEmail"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:textAlignment="viewStart"
+                android:translationX="-37dp" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.1"
-            android:orientation="horizontal"
-            android:paddingStart="40dp">
+            android:orientation="horizontal">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="23dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="20dp"
+                android:layout_weight="0.2"
                 android:text="@string/vk" />
 
             <View
                 android:id="@+id/divider10"
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1" />
+                android:layout_weight="0.5" />
 
             <TextView
                 android:id="@+id/profileVK"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textAlignment="viewStart"
+                android:layout_weight="0.3" />
         </LinearLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/baumans"
-            android:paddingStart="15dp"
-            android:text="@string/about"
-            android:textSize="18sp" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_weight="0.4"
+                android:fontFamily="@font/baumans"
+                android:text="@string/about"
+                android:textSize="18sp" />
+
+            <ImageView
+                android:id="@+id/karandash4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="40dp"
+                app:srcCompat="@drawable/ic_karandashik_01" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.1"
-            android:orientation="horizontal"
-            android:paddingStart="40dp">
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="20dp"
+                android:layout_weight="0.2"
                 android:text="@string/study" />
 
             <View
                 android:id="@+id/divider11"
-                android:layout_width="1dp"
+                android:layout_width="40dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
 
             <TextView
                 android:id="@+id/profileStudy"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.1"
-            android:orientation="horizontal"
-            android:paddingStart="40dp">
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
                 android:text="@string/workplace" />
 
             <View
@@ -342,19 +419,21 @@
             <TextView
                 android:id="@+id/profileWork"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.1"
-            android:orientation="horizontal"
-            android:paddingStart="40dp">
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_weight="0.2"
                 android:text="@string/interests" />
 
             <View
@@ -366,13 +445,14 @@
             <TextView
                 android:id="@+id/profileInterest"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3" />
         </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="60dp">
 
         <include layout="@layout/footer" />
     </LinearLayout>

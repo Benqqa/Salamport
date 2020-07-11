@@ -2,12 +2,15 @@ package com.newpage.salamport
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.widget.Button
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
+import com.newpage.salamport.media.MusicList
 import com.vk.api.sdk.VK
 import com.vk.api.sdk.auth.VKAccessToken
 import com.vk.api.sdk.auth.VKAuthCallback
@@ -23,6 +26,8 @@ class MainActivity : AppCompatActivity() {
 
     val client = OkHttpClient.Builder().build()
 
+    private lateinit var send: Intent
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -31,6 +36,7 @@ class MainActivity : AppCompatActivity() {
 
         if (VK.isLoggedIn()) {
             val grishaTokenAndSession = loadGrishaTokenAndSession()
+
             UserActivity.startFrom(this, grishaToken = grishaTokenAndSession[0],
                 grishaSession = grishaTokenAndSession[1])
         }

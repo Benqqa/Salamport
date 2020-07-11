@@ -34,7 +34,7 @@ data class Friend(
 
 class FriendsAdapter(
     var friends: ArrayList<Friend>,
-    private val context: FriendsActivity,
+    private val context: AppCompatActivity,
     private val session: String, private val token: String,
     private val mode: String = ""
 ) :
@@ -45,18 +45,28 @@ class FriendsAdapter(
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val nameAndUsername: TextView = view.findViewById(R.id.friendNameAndUsername)
         val friendAvatar: ImageView = view.findViewById(R.id.friendAvatar)
-        val friendToChat: Button = view.findViewById(R.id.friendToChat)
+        val friendToChat: ImageView = view.findViewById(R.id.friendToChat)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(context)
-        return ViewHolder(
-            inflater.inflate(
-                R.layout.friends_view_holder,
-                parent,
-                false
+        if (mode != "request") {
+            return ViewHolder(
+                inflater.inflate(
+                    R.layout.friends_view_holder,
+                    parent,
+                    false
+                )
             )
-        )
+        } else {
+            return ViewHolder(
+                inflater.inflate(
+                    R.layout.request_friends_holder,
+                    parent,
+                    false
+                )
+            )
+        }
     }
 
     override fun getItemCount(): Int {
@@ -258,7 +268,7 @@ class FriendsActivity : AppCompatActivity() {
             }
         }
 
-        findViewById<Button>(R.id.findUsersButton).setOnClickListener {
+        findViewById<ImageView>(R.id.findUsersButton).setOnClickListener {
             UserSearchResult.startFrom(
                 this, session = session,
                 token = token, searchQuery = findViewById<EditText>(R.id.searchFriendsQuery)

@@ -9,10 +9,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
+import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -46,20 +44,21 @@ class MessagesAdapter : RecyclerView.Adapter<MessagesAdapter.ViewHolder> {
     private val context: Context
     private val messages: ArrayList<Message>
     private val avatarsMap: HashMap<String, String>?
+    private val myID: String
 
     constructor(
         context: Context, messages: ArrayList<Message>,
-        avatars: HashMap<String, String>? = null
+        avatars: HashMap<String, String>? = null, myID: String
     ) : super() {
         this.context = context
         this.messages = messages
         this.avatarsMap = avatars
+        this.myID = myID
     }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val content: TextView = view.findViewById(R.id.messageContent)
-        val messageAvatar: ImageView = view.findViewById(R.id.messageAvatar)
-        val msgDatetime: TextView = view.findViewById(R.id.messageDatetime)
+        val rightContent: TextView = view.findViewById(R.id.messageContentRight)
     }
 
     fun addMessage(msg: Message): Int {
@@ -97,18 +96,28 @@ class MessagesAdapter : RecyclerView.Adapter<MessagesAdapter.ViewHolder> {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val msg = messages[position]
-        holder.content.text = msg.content
-        holder.msgDatetime.text = msg.datetime.toString()
-        if (this.avatarsMap != null) {
-            val avatar = avatarsMap[msg.owner]
-            Glide
-                .with(context)
-                .load(avatar)
-                .apply(
-                    RequestOptions
-                        .bitmapTransform(RoundedCorners(250))
-                )
-                .into(holder.messageAvatar)
+        holder.content.text = ""
+        holder.rightContent.text = ""
+        if (msg.owner != myID) {
+            holder.rightContent.text = msg.content
+            holder.rightContent.layoutParams = LinearLayoutCompat.LayoutParams(
+                0, LinearLayoutCompat.LayoutParams.MATCH_PARENT, 0.8f
+            )
+            holder.content.background = context.getDrawable(R.color.white)
+            holder.rightContent.background = context.getDrawable(R.drawable.background)
+            holder.content.layoutParams = LinearLayoutCompat.LayoutParams(
+                0, LinearLayoutCompat.LayoutParams.MATCH_PARENT, 0.2f
+            )
+        } else {
+            holder.content.text = msg.content
+            holder.content.layoutParams = LinearLayoutCompat.LayoutParams(
+                0, LinearLayoutCompat.LayoutParams.MATCH_PARENT, 0.8f
+            )
+            holder.rightContent.background = context.getDrawable(R.color.white)
+            holder.content.background = context.getDrawable(R.drawable.background)
+            holder.rightContent.layoutParams = LinearLayoutCompat.LayoutParams(
+                0, LinearLayoutCompat.LayoutParams.MATCH_PARENT, 0.2f
+            )
         }
     }
 }
@@ -125,7 +134,7 @@ class MessagesActivity : AppCompatActivity() {
 
     private lateinit var handler: Handler
 
-    private var map: HashMap<String, Boolean> = HashMap()
+    private var map: Hashtable<String, Boolean> = Hashtable()
 
     private val client: OkHttpClient = OkHttpClient.Builder().build()
 
@@ -138,31 +147,67 @@ class MessagesActivity : AppCompatActivity() {
         grishaToken = intent.getStringExtra("token")
         grishaSession = intent.getStringExtra("session")
         chat_id = intent.getStringExtra("chat_id")
-
         val isPrivate = intent.getStringExtra("is_private")
-        if (isPrivate == "true") {
-            val arrayUsers = intent.getStringArrayListExtra("array_users")
-            val arrayAvatars = intent.getStringArrayListExtra("array_avatars")
-            val usersAvatars = HashMap<String, String>()
 
-            for (i in 0 until arrayUsers.size) {
-                usersAvatars[arrayUsers[i]] = arrayAvatars[i]
+
+        GlobalScope.launch {
+            val requestBody = FormBody.Builder()
+                .add("session", grishaSession)
+                .add("token", grishaToken)
+                .build()
+            val request = Request.Builder()
+                .url("https://salamport.newpage.xyz/api/lk.php")
+                .post(requestBody)
+                .addHeader("Content-Type", "application/x-www-form-urlencoded")
+                .build()
+            val response =
+                withContext(Dispatchers.IO) { client.newCall(request).await().body?.string() }
+            try {
+                val responseJSON = JSONObject(response)
+                val myID = responseJSON.getString("id")
+                this@MessagesActivity.runOnUiThread {
+                    if (isPrivate == "true") {
+                        val arrayUsers = intent.getStringArrayListExtra("array_users")
+                        val arrayAvatars = intent.getStringArrayListExtra("array_avatars")
+                        val usersAvatars = HashMap<String, String>()
+
+                        for (i in 0 until arrayUsers.size) {
+                            usersAvatars[arrayUsers[i]] = arrayAvatars[i]
+                        }
+                        Glide
+                            .with(this@MessagesActivity)
+                            .load(arrayAvatars[0])
+                            .apply(
+                                RequestOptions
+                                    .bitmapTransform(RoundedCorners(250))
+                            )
+                            .into(findViewById(R.id.messagesAvatar))
+
+                        messagesHolder =
+                            MessagesAdapter(
+                                this@MessagesActivity,
+                                messages,
+                                usersAvatars,
+                                myID = myID
+                            )
+                    } else {
+                        messagesHolder =
+                            MessagesAdapter(this@MessagesActivity, messages, myID = myID)
+                    }
+                    mlayoutManager = LinearLayoutManager(this@MessagesActivity)
+                    messagesRecycler = findViewById<RecyclerView>(R.id.messagesRecycler).apply {
+                        setHasFixedSize(true)
+                        layoutManager = mlayoutManager
+                        adapter = messagesHolder
+                    }
+                    handler = Handler()
+                    loadMessagesFromServer()
+                }
+            } catch (j: JSONException) {
+                Log.e("j", "sorru")
             }
-            messagesHolder = MessagesAdapter(this, messages, usersAvatars)
-        } else {
-            messagesHolder = MessagesAdapter(this, messages)
         }
-        handler = Handler()
 
-
-
-        mlayoutManager = LinearLayoutManager(this)
-        messagesRecycler = findViewById<RecyclerView>(R.id.messagesRecycler).apply {
-            setHasFixedSize(true)
-            layoutManager = mlayoutManager
-            adapter = messagesHolder
-        }
-        loadMessagesFromServer()
 
         findViewById<Button>(R.id.messageSend).setOnClickListener {
             val typed: EditText = findViewById(R.id.typedMessage)
@@ -186,6 +231,7 @@ class MessagesActivity : AppCompatActivity() {
                 }
             }
         }
+
     }
 
     private fun loadMessagesFromServer() {
@@ -213,9 +259,8 @@ class MessagesActivity : AppCompatActivity() {
                     val formatter = SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss")
 
                     val message = Message(id, ownerID, content, formatter.parse(datetime))
-
-                    runOnUiThread {
-                        if (!map.containsKey(id)) {
+                    if (!map.containsKey(id)) {
+                        runOnUiThread {
                             val pos = this@MessagesActivity.messagesHolder.addMessage(message)
                             this@MessagesActivity.messagesHolder.notifyDataSetChanged()
                             this@MessagesActivity.messagesRecycler.scrollToPosition(pos)

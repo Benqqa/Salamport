@@ -49,8 +49,18 @@
     <string name="az">Kazakh</string>
     <string name="rand">Helicopter</string>
     <string name="start">Старт</string>
-    <string name="NAIDITE">гыг</string>
-    <string name="PROVERTE">я против меда</string>
-    <string name="OTKlIKI">я не пчела</string>
-    <string name="ISHU">я свинья</string>
+    <string name="NAIDITE">find new mates</string>
+    <string name="PROVERTE">"check otkliki "</string>
+    <string name="OTKlIKI">otkliki</string>
+    <string name="ISHU">wanna dating</string>
+    <string name="muzika">Music</string>
+    <string name="video">Video</string>
+    <string name="notification_channel_name">music</string>
+    <string name="pause">pause</string>
+    <string name="play">play</string>
+    <string name="OTKLIKI">Matches</string>
+    <string name="completed_tinder">No matches anymore(</string>
+    <string name="stop">Stop</string>
+    <string name="spravka">About</string>
+    <string name="chats">Chats</string>
 </resources>

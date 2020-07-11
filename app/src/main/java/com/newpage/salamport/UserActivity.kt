@@ -1,17 +1,33 @@
 package com.newpage.salamport
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.transition.TransitionInflater
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import com.location.aravind.getlocation.GeoLocator
+import com.newpage.salamport.media.MediaStart
 import com.newpage.salamport.services.FilterActivity
 import com.newpage.salamport.services.ServicesActivity
 import com.newpage.salamport.services.TinderStart
 import com.vk.api.sdk.VK
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import okhttp3.FormBody
+import okhttp3.OkHttp
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import org.json.JSONObject
+import ru.gildor.coroutines.okhttp.await
 import java.nio.charset.StandardCharsets
 
 
@@ -20,9 +36,13 @@ class UserActivity : Activity() {
     private lateinit var grishaToken: String
     private lateinit var grishaSession: String
 
+    private val client = OkHttpClient.Builder().build()
 
+
+    @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
         setContentView(R.layout.activity_user)
 
         grishaToken = intent.getStringExtra("token")
@@ -40,6 +60,29 @@ class UserActivity : Activity() {
             )
         }
 
+        GlobalScope.launch {
+            val requestBody = FormBody.Builder()
+                .add("session", grishaSession)
+                .add("token", grishaToken)
+                .build()
+            val request = Request.Builder()
+                .url("https://salamport.newpage.xyz/api/lk.php")
+                .post(requestBody)
+                .addHeader("Content-Type", "application/x-www-form-urlencoded")
+                .build()
+            val response =
+                withContext(Dispatchers.IO) { client.newCall(request).await().body?.string() }
+            val imgView = findViewById<ImageView>(R.id.avatar)
+
+            val responseJSON = JSONObject(response)
+            val avatar = responseJSON.getString("photo")
+            this@UserActivity.runOnUiThread {
+                Glide.with(this@UserActivity)
+                    .load(avatar)
+                    .apply(RequestOptions.bitmapTransform(RoundedCorners(250)))
+                    .into(imgView)
+            }
+        }
         val logoutButton = findViewById<ImageView>(R.id.logout)
         logoutButton.setOnClickListener {
             if (VK.isLoggedIn())
@@ -72,12 +115,11 @@ class UserActivity : Activity() {
             TinderStart.startFrom(this, session = grishaSession, token = grishaToken)
         }
 
-        initGeolocation()
+        findViewById<ImageView>(R.id.goToMediaStart).setOnClickListener {
+            MediaStart.startFrom(this, session = grishaSession, token = grishaToken)
+        }
     }
 
-    private fun initGeolocation() {
-        SingletonGeolocation.init(applicationContext, this, grishaSession, grishaToken)
-    }
 
     private fun saveSessionAndToken(session: String, token: String) {
         this.openFileOutput("session", Context.MODE_PRIVATE).use {
