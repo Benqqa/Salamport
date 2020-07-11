@@ -3,6 +3,9 @@
     package="com.newpage.salamport">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:name=".TokenHandler"
@@ -12,7 +15,11 @@
         android:roundIcon="@drawable/logo1"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".UserSearchResult"></activity>
+        <activity android:name=".services.TinderStart"></activity>
+        <activity android:name=".services.TinderActivity" />
+        <activity android:name=".services.FilterActivity" />
+        <activity android:name=".services.ServicesActivity" />
+        <activity android:name=".UserSearchResult" />
         <activity android:name=".FriendsActivity" />
         <activity android:name=".LoginPassword" />
         <activity android:name=".MessagesActivity" />

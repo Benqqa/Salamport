@@ -32,4 +32,25 @@
     <string name="searchFriends">Find new friends</string>
     <string name="searchResults">Results:</string>
     <string name="requestsForFriends">REQUESTS FURR FRINES</string>
+    <string name="places">PLACES</string>
+    <string name="advertisements">AD</string>
+    <string name="tinder">Tinder</string>
+    <string name="poiskFigni">POISK MAGAZINOV</string>
+    <string name="razmestite">"RAZMESTITE "</string>
+    <string name="poiskSoseda">mda</string>
+    <string name="authorize_location">G P S</string>
+    <string name="chooseCat">Choose filters</string>
+    <string name="m">Male</string>
+    <string name="f">Female</string>
+    <string name="age">Age</string>
+    <string name="range">Range</string>
+    <string name="language">Language</string>
+    <string name="ru">Russian</string>
+    <string name="az">Kazakh</string>
+    <string name="rand">Helicopter</string>
+    <string name="start">Старт</string>
+    <string name="NAIDITE">гыг</string>
+    <string name="PROVERTE">я против меда</string>
+    <string name="OTKlIKI">я не пчела</string>
+    <string name="ISHU">я свинья</string>
 </resources>

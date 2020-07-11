@@ -116,6 +116,10 @@ class FriendsAdapter(
                         withContext(Dispatchers.IO) {
                             client.newCall(request).await().body?.string()
                         }
+                    context.finish()
+                    context.overridePendingTransition(0, 0)
+                    context.startActivity(context.intent)
+                    context.overridePendingTransition(0, 0)
                 }
             }
         }

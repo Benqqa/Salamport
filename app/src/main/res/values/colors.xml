@@ -3,4 +3,8 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
+    <color name="white">#ffffff</color>
+    <color name="zhelto">#eeac02</color>
+    <color name="rozovo"> #f91a73</color>
+    <color name="orangevo">#ee4602</color>
 </resources>

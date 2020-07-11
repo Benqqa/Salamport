@@ -32,4 +32,25 @@
     <string name="searchFriends">Поиск новых друзей</string>
     <string name="searchResults">Результаты поиска</string>
     <string name="requestsForFriends">Заявки в друзья</string>
+    <string name="places">Заведения</string>
+    <string name="advertisements">Объявления</string>
+    <string name="tinder">Поиск соседа</string>
+    <string name="poiskFigni">Поиск магазинов, аптек, кафе, хостелов, парикмахерских и других мест</string>
+    <string name="razmestite">Разместите объявление для продажи товаров</string>
+    <string name="poiskSoseda">Найдите себе соседа для съема жилья</string>
+    <string name="authorize_location">location plz</string>
+    <string name="chooseCat">Выберите желаемые категории</string>
+    <string name="m">Мужской</string>
+    <string name="f">Женский</string>
+    <string name="rand">Любой</string>
+    <string name="age">Возраст</string>
+    <string name="range">Расстояние</string>
+    <string name="language">Язык</string>
+    <string name="ru">Русский</string>
+    <string name="az">Азербайждайский</string>
+    <string name="start">Начать</string>
+    <string name="NAIDITE">Найдите себе новых знакомых или вторую половинку</string>
+    <string name="PROVERTE">Проверьте отклики на взаимный интерес</string>
+    <string name="OTKlIKI">Отклики</string>
+    <string name="ISHU">Ищу знакомства</string>
 </resources>

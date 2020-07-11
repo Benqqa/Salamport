@@ -7,16 +7,11 @@ import android.os.Bundle
 import android.transition.TransitionInflater
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import com.location.aravind.getlocation.GeoLocator
+import com.newpage.salamport.services.FilterActivity
+import com.newpage.salamport.services.ServicesActivity
+import com.newpage.salamport.services.TinderStart
 import com.vk.api.sdk.VK
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import okhttp3.FormBody
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import org.json.JSONObject
-import ru.gildor.coroutines.okhttp.await
 import java.nio.charset.StandardCharsets
 
 
@@ -24,6 +19,7 @@ class UserActivity : Activity() {
 
     private lateinit var grishaToken: String
     private lateinit var grishaSession: String
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,6 +60,23 @@ class UserActivity : Activity() {
                 this@UserActivity, token = grishaToken, session = grishaSession
             )
         }
+
+        findViewById<ImageView>(R.id.services).setOnClickListener {
+            ServicesActivity.startFrom(
+                this, session = grishaSession,
+                token = grishaToken
+            )
+        }
+
+        findViewById<ImageView>(R.id.goToTinderStart).setOnClickListener {
+            TinderStart.startFrom(this, session = grishaSession, token = grishaToken)
+        }
+
+        initGeolocation()
+    }
+
+    private fun initGeolocation() {
+        SingletonGeolocation.init(applicationContext, this, grishaSession, grishaToken)
     }
 
     private fun saveSessionAndToken(session: String, token: String) {
@@ -81,6 +94,7 @@ class UserActivity : Activity() {
     override fun onBackPressed() {
 
     }
+
 
     companion object {
         fun startFrom(

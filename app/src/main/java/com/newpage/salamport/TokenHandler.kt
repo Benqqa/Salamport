@@ -12,7 +12,6 @@ class TokenHandler : Application (){
     override fun onCreate() {
         super.onCreate()
         VK.addTokenExpiredHandler(tokenTracker)
-
     }
 
     private val tokenTracker = object: VKTokenExpiredHandler {
