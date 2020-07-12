@@ -5,6 +5,9 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageView
+import com.newpage.salamport.ChatActivity
+import com.newpage.salamport.FriendsActivity
 import com.newpage.salamport.R
 
 
@@ -23,6 +26,19 @@ class MediaStart : AppCompatActivity() {
         val goToMusicList = findViewById<Button>(R.id.goToMusicList)
         goToMusicList.setOnClickListener {
             MusicList.startFrom(this, session = session, token = token)
+        }
+
+        findViewById<ImageView>(R.id.goToMessages).setOnClickListener {
+            ChatActivity.startFrom(
+                this, token = token,
+                session = session
+            )
+        }
+
+        findViewById<ImageView>(R.id.goToFriends).setOnClickListener {
+            FriendsActivity.startFrom(
+                this, token = token, session = session
+            )
         }
 
     }

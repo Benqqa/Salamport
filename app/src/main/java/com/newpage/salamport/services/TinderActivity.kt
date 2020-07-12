@@ -2,15 +2,15 @@ package com.newpage.salamport.services
 
 import android.content.Context
 import android.content.Intent
+import android.media.Image
 import android.os.Bundle
 import android.util.Log
-import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
-import com.newpage.salamport.Friend
-import com.newpage.salamport.R
+import com.newpage.salamport.*
 import com.newpage.salamport.support.GestureHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -24,6 +24,11 @@ import org.json.JSONObject
 import ru.gildor.coroutines.okhttp.await
 
 
+data class Dating(
+    val id: String, val name: String, val surname: String,
+    val gender: String, val nativeCity: String, val radius: String, val avatar: String
+)
+
 class TinderActivity : AppCompatActivity() {
 
     private lateinit var session: String
@@ -34,7 +39,7 @@ class TinderActivity : AppCompatActivity() {
     private lateinit var max_b: String
 
     private val client = OkHttpClient.Builder().build()
-    private val datings = ArrayList<Friend>()
+    private val datings = ArrayList<Dating>()
 
     private var currentIndex = 0
 
@@ -49,6 +54,18 @@ class TinderActivity : AppCompatActivity() {
         min_b = intent.getStringExtra("min_b")
         max_b = intent.getStringExtra("max_b")
 
+        findViewById<ImageView>(R.id.goToMessages).setOnClickListener {
+            ChatActivity.startFrom(
+                this, token = token,
+                session = session
+            )
+        }
+
+        findViewById<ImageView>(R.id.goToFriends).setOnClickListener {
+            FriendsActivity.startFrom(
+                this, token = token, session = session
+            )
+        }
 
 
         GlobalScope.launch {
@@ -73,6 +90,7 @@ class TinderActivity : AppCompatActivity() {
                 val datingsJSON = JSONArray(responseString)
                 for (i in 0 until datingsJSON.length()) {
                     val userID = datingsJSON.getJSONObject(i).getString("id")
+                    val radius = datingsJSON.getJSONObject(i).getString("radius")
                     val requestBodyForProfile = FormBody.Builder()
                         .add("token", token)
                         .add("session", session)
@@ -90,11 +108,13 @@ class TinderActivity : AppCompatActivity() {
                     val userAvatar = userProfileJson.getString("photo")
                     val userName = userProfileJson.getString("name")
                     val userSurname = userProfileJson.getString("surname")
-                    val user = Friend(
-                        userID, name = userName, surname = userSurname,
-                        photo = userAvatar
+                    val gender = userProfileJson.getString("sex")
+                    val nativeCity = userProfileJson.getString("native_city")
+                    val dating = Dating(
+                        id = userID, name = userName, surname = userSurname, avatar = userAvatar,
+                        radius = radius, gender = gender, nativeCity = nativeCity
                     )
-                    datings.add(user)
+                    datings.add(dating)
                 }
                 runOnUiThread {
                     renderDatings()
@@ -153,20 +173,32 @@ class TinderActivity : AppCompatActivity() {
     }
 
     private fun renderDatings() {
-        val txt = findViewById<TextView>(R.id.textTINDER)
-        val imgView = findViewById<ImageView>(R.id.imageOfT)
-
-        if (currentIndex == datings.size) {
-            txt.text = getString(R.string.completed_tinder)
-        } else {
-
-            Glide.with(this)
-                .load(datings[currentIndex].photo)
-                .into(imgView)
-
-            txt.text = datings[currentIndex].name
+        if (currentIndex >= datings.size) {
+            Toast.makeText(this, "Никого нет", Toast.LENGTH_SHORT).show()
+            UserActivity.startFrom(
+                this, grishaSession = session,
+                grishaToken = token
+            )
         }
+        val upperText = findViewById<TextView>(R.id.textTINDER)
+        val imgView = findViewById<ImageView>(R.id.imageOfT)
+        val rangeText = findViewById<TextView>(R.id.tinderRange)
+        val tinderNativeCity = findViewById<TextView>(R.id.tinderNativeCity)
+        val genderAv = findViewById<ImageView>(R.id.tinderGender)
+
+        when (datings[currentIndex].gender) {
+            "1" -> genderAv.setImageResource(R.drawable.ic_muzh_01)
+            "0" -> genderAv.setImageResource(R.drawable.ic_zhen_01)
+        }
+        Glide.with(this)
+            .load(datings[currentIndex].avatar)
+            .into(imgView)
+
+        upperText.text = datings[currentIndex].name + " " + datings[currentIndex].surname
+        rangeText.text = datings[currentIndex].radius
+        tinderNativeCity.text = "Родной город: " + datings[currentIndex].nativeCity
     }
+
 
     companion object {
         fun startFrom(

@@ -19,9 +19,11 @@
         android:layout_weight="30"
         android:id="@+id/goToMessages"
         android:src="@drawable/soob"/>
+
     <ImageView
+        android:id="@+id/goToFeed"
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:layout_weight="30"
-        android:src="@drawable/nov"/>
+        android:src="@drawable/nov" />
 </LinearLayout>

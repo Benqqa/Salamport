@@ -100,6 +100,7 @@ class MessagesAdapter : RecyclerView.Adapter<MessagesAdapter.ViewHolder> {
         holder.rightContent.text = ""
         if (msg.owner != myID) {
             holder.rightContent.text = msg.content
+            holder.rightContent.textAlignment = View.TEXT_ALIGNMENT_TEXT_END
             holder.rightContent.layoutParams = LinearLayoutCompat.LayoutParams(
                 0, LinearLayoutCompat.LayoutParams.MATCH_PARENT, 0.8f
             )
@@ -110,6 +111,7 @@ class MessagesAdapter : RecyclerView.Adapter<MessagesAdapter.ViewHolder> {
             )
         } else {
             holder.content.text = msg.content
+            holder.content.textAlignment = View.TEXT_ALIGNMENT_TEXT_START
             holder.content.layoutParams = LinearLayoutCompat.LayoutParams(
                 0, LinearLayoutCompat.LayoutParams.MATCH_PARENT, 0.8f
             )

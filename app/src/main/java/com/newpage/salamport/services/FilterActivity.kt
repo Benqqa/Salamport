@@ -4,11 +4,9 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import android.widget.RadioButton
-import android.widget.SeekBar
-import android.widget.TextView
+import android.widget.*
 import com.newpage.salamport.ChatActivity
+import com.newpage.salamport.FriendsActivity
 import com.newpage.salamport.R
 
 class FilterActivity : Activity() {
@@ -32,6 +30,19 @@ class FilterActivity : Activity() {
 
         val isMale = findViewById<RadioButton>(R.id.radioButton1)
         var isFemale = findViewById<RadioButton>(R.id.radioButton2)
+
+        findViewById<ImageView>(R.id.goToMessages).setOnClickListener {
+            ChatActivity.startFrom(
+                this, token = token,
+                session = session
+            )
+        }
+
+        findViewById<ImageView>(R.id.goToFriends).setOnClickListener {
+            FriendsActivity.startFrom(
+                this, token = token, session = session
+            )
+        }
 
         isMale.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) sex = "1"

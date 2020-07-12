@@ -156,6 +156,13 @@ class FriendsActivity : AppCompatActivity() {
         session = intent.getStringExtra("session")
         token = intent.getStringExtra("token")
 
+        findViewById<ImageView>(R.id.goToMessages).setOnClickListener {
+            ChatActivity.startFrom(
+                this, token = token,
+                session = session
+            )
+        }
+
         val mLayoutManager = LinearLayoutManager(this@FriendsActivity)
         fadapter = FriendsAdapter(
             ArrayList(), this@FriendsActivity,

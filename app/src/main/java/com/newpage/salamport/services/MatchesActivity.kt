@@ -4,11 +4,10 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.newpage.salamport.Friend
-import com.newpage.salamport.FriendsAdapter
-import com.newpage.salamport.R
+import com.newpage.salamport.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -46,6 +45,18 @@ class MatchesActivity : AppCompatActivity() {
             setHasFixedSize(true)
             adapter = fadapter
             layoutManager = mLayoutManager
+        }
+        findViewById<ImageView>(R.id.goToMessages).setOnClickListener {
+            ChatActivity.startFrom(
+                this, token = token,
+                session = session
+            )
+        }
+
+        findViewById<ImageView>(R.id.goToFriends).setOnClickListener {
+            FriendsActivity.startFrom(
+                this, token = token, session = session
+            )
         }
         loadMatches()
     }

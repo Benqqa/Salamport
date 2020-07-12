@@ -7,9 +7,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.ImageView
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.app.ActivityCompat
 import com.location.aravind.getlocation.GeoLocator
+import com.newpage.salamport.ChatActivity
+import com.newpage.salamport.FriendsActivity
 import com.newpage.salamport.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -36,6 +39,19 @@ class TinderStart : AppCompatActivity() {
 
         session = intent.getStringExtra("session")
         token = intent.getStringExtra("token")
+
+        findViewById<ImageView>(R.id.goToMessages).setOnClickListener {
+            ChatActivity.startFrom(
+                this, token = token,
+                session = session
+            )
+        }
+
+        findViewById<ImageView>(R.id.goToFriends).setOnClickListener {
+            FriendsActivity.startFrom(
+                this, token = token, session = session
+            )
+        }
 
         ActivityCompat.requestPermissions(
             this,

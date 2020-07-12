@@ -134,7 +134,7 @@ class ChatAdapter(
                     loadWithGlide(userProfilePhotoString, holder)
                     loadUserName(username, holder)
                 } catch (j: JSONException) {
-                    Log.e("e", "задолбало это говно")
+                    Log.e("e", "json error")
                 }
             }
         } else {
@@ -193,6 +193,13 @@ class ChatActivity : AppCompatActivity() {
         grishaSession = intent.getStringExtra("session")
 
         setContentView(R.layout.activity_chat)
+
+
+        findViewById<ImageView>(R.id.goToFriends).setOnClickListener {
+            FriendsActivity.startFrom(
+                this, token = grishaToken, session = grishaSession
+            )
+        }
 
         chatAdapter = ChatAdapter(this, chats, grishaSession, grishaToken, client)
         mlayoutManager = LinearLayoutManager(this)

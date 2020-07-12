@@ -15,6 +15,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
+import com.newpage.salamport.ChatActivity
+import com.newpage.salamport.FriendsActivity
 import com.newpage.salamport.R
 import com.newpage.salamport.media.PlaybackService.PlaybackServiceBinder
 
@@ -59,6 +61,19 @@ class MediaPlayerActivity : AppCompatActivity() {
         session = intent.getStringExtra("session")
         token = intent.getStringExtra("token")
         position = intent.getIntExtra("position", 0)
+
+        findViewById<ImageView>(R.id.goToMessages).setOnClickListener {
+            ChatActivity.startFrom(
+                this, token = token,
+                session = session
+            )
+        }
+
+        findViewById<ImageView>(R.id.goToFriends).setOnClickListener {
+            FriendsActivity.startFrom(
+                this, token = token, session = session
+            )
+        }
 
         imageLogo = findViewById(R.id.MediaTrackLogo)
         textAuthor = findViewById(R.id.MusicAuthor)

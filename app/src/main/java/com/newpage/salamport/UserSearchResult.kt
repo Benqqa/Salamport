@@ -113,6 +113,19 @@ class UserSearchResult : AppCompatActivity() {
         val mLayoutAdapter = LinearLayoutManager(this)
         fadapter = UsersSearchAdapter(ArrayList(), this, session, token)
 
+        findViewById<ImageView>(R.id.goToMessages).setOnClickListener {
+            ChatActivity.startFrom(
+                this, token = token,
+                session = session
+            )
+        }
+
+        findViewById<ImageView>(R.id.goToFriends).setOnClickListener {
+            FriendsActivity.startFrom(
+                this, token = token, session = session
+            )
+        }
+
         recyclerView.apply {
             layoutManager = mLayoutAdapter
             setHasFixedSize(true)

@@ -130,6 +130,19 @@ class MusicList : AppCompatActivity() {
             1
         )
 
+        findViewById<ImageView>(R.id.goToMessages).setOnClickListener {
+            ChatActivity.startFrom(
+                this, token = token,
+                session = session
+            )
+        }
+
+        findViewById<ImageView>(R.id.goToFriends).setOnClickListener {
+            FriendsActivity.startFrom(
+                this, token = token, session = session
+            )
+        }
+
         loadUI()
         loadTrackList()
         trackAdapter = TrackAdapter(this, ArrayList(), session, token, client)

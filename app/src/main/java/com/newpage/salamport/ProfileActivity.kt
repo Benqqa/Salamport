@@ -97,6 +97,19 @@ class ProfileActivity : AppCompatActivity() {
         grishaSession = intent.getStringExtra("session")
         grishaToken = intent.getStringExtra("token")
         client = OkHttpClient.Builder().build()
+
+        findViewById<ImageView>(R.id.goToMessages).setOnClickListener {
+            ChatActivity.startFrom(
+                this, token = grishaToken,
+                session = grishaSession
+            )
+        }
+
+        findViewById<ImageView>(R.id.goToFriends).setOnClickListener {
+            FriendsActivity.startFrom(
+                this, token = grishaToken, session = grishaSession
+            )
+        }
         createOnClickListeners()
         updateUserProfileFromServer()
     }

@@ -63,9 +63,11 @@
                 android:layout_height="wrap_content"/>
         </LinearLayout>
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="96dp">
-        <include layout="@layout/footer"/>
+        android:layout_height="60dp">
+
+        <include layout="@layout/footer" />
     </LinearLayout>
 </LinearLayout>

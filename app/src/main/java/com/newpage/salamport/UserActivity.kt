@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.location.aravind.getlocation.GeoLocator
+import com.newpage.salamport.groups.NewsActivity
 import com.newpage.salamport.media.MediaStart
 import com.newpage.salamport.services.FilterActivity
 import com.newpage.salamport.services.ServicesActivity
@@ -52,13 +53,6 @@ class UserActivity : Activity() {
         window.exitTransition = slide
 
 
-        val goToMessages = findViewById<ImageView>(R.id.goToMessages)
-        goToMessages.setOnClickListener {
-            ChatActivity.startFrom(
-                this, token = grishaToken,
-                session = grishaSession
-            )
-        }
 
         GlobalScope.launch {
             val requestBody = FormBody.Builder()
@@ -98,8 +92,21 @@ class UserActivity : Activity() {
             )
         }
 
+        findViewById<ImageView>(R.id.goToMessages).setOnClickListener {
+            ChatActivity.startFrom(
+                this, token = grishaToken,
+                session = grishaSession
+            )
+        }
+
         findViewById<ImageView>(R.id.goToFriends).setOnClickListener {
             FriendsActivity.startFrom(
+                this@UserActivity, token = grishaToken, session = grishaSession
+            )
+        }
+
+        findViewById<ImageView>(R.id.goToFeed).setOnClickListener {
+            NewsActivity.startFrom(
                 this@UserActivity, token = grishaToken, session = grishaSession
             )
         }
