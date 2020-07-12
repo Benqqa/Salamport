@@ -10,7 +10,7 @@
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:layout_weight="30"
-        android:src="@drawable/dr"
+        android:src="@drawable/ic_dr_01"
         android:id="@+id/goToFriends"
         />
     <ImageView
@@ -18,12 +18,12 @@
         android:layout_height="56dp"
         android:layout_weight="30"
         android:id="@+id/goToMessages"
-        android:src="@drawable/soob"/>
+        android:src="@drawable/ic_soob_01" />
 
     <ImageView
         android:id="@+id/goToFeed"
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:layout_weight="30"
-        android:src="@drawable/nov" />
+        android:src="@drawable/ic_nov_01" />
 </LinearLayout>

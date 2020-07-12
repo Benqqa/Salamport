@@ -2,12 +2,13 @@ package com.newpage.salamport.services
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.newpage.salamport.*
+import com.newpage.salamport.groups.NewsActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -55,6 +56,12 @@ class MatchesActivity : AppCompatActivity() {
 
         findViewById<ImageView>(R.id.goToFriends).setOnClickListener {
             FriendsActivity.startFrom(
+                this, token = token, session = session
+            )
+        }
+
+        findViewById<ImageView>(R.id.goToFeed).setOnClickListener {
+            NewsActivity.startFrom(
                 this, token = token, session = session
             )
         }

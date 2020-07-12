@@ -12,10 +12,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
-import com.location.aravind.getlocation.GeoLocator
 import com.newpage.salamport.groups.NewsActivity
 import com.newpage.salamport.media.MediaStart
-import com.newpage.salamport.services.FilterActivity
 import com.newpage.salamport.services.ServicesActivity
 import com.newpage.salamport.services.TinderStart
 import com.vk.api.sdk.VK
@@ -24,7 +22,6 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.FormBody
-import okhttp3.OkHttp
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.json.JSONObject
@@ -43,7 +40,7 @@ class UserActivity : Activity() {
     @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         setContentView(R.layout.activity_user)
 
         grishaToken = intent.getStringExtra("token")
@@ -97,6 +94,10 @@ class UserActivity : Activity() {
                 this, token = grishaToken,
                 session = grishaSession
             )
+        }
+
+        findViewById<ImageView>(R.id.goToFeed).setOnClickListener {
+            NewsActivity.startFrom(this, token = grishaToken, session = grishaSession)
         }
 
         findViewById<ImageView>(R.id.goToFriends).setOnClickListener {

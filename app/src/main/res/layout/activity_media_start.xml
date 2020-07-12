@@ -7,7 +7,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="222dp"
         android:layout_marginLeft="70dp"
         android:layout_marginTop="150dp"
         android:layout_marginRight="90dp"
@@ -17,27 +17,19 @@
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/baumans"
-            android:text="@string/NAIDITE"
-            android:textAlignment="center" />
-
         <Button
+            android:id="@+id/goToMusicList"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:id="@+id/goToMusicList"
             android:background="@color/zhelto"
             android:text="@string/muzika" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/baumans"
-            android:text="@string/PROVERTE"
-            android:textAlignment="center" />
+        <View
+            android:id="@+id/divider14"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:background="@color/white" />
 
         <Button
             android:layout_width="wrap_content"
@@ -50,7 +42,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="96dp">
+        android:layout_height="60dp">
 
         <include layout="@layout/footer" />
     </LinearLayout>

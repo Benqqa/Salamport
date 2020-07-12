@@ -2,12 +2,14 @@ package com.newpage.salamport.groups
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.newpage.salamport.Friend
+import com.newpage.salamport.ChatActivity
+import com.newpage.salamport.FriendsActivity
 import com.newpage.salamport.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -38,6 +40,24 @@ class SearchGroupsActivity : AppCompatActivity() {
         session = intent.getStringExtra("session")
         token = intent.getStringExtra("token")
         query = intent.getStringExtra("query")
+
+        findViewById<ImageView>(R.id.goToMessages).setOnClickListener {
+            ChatActivity.startFrom(
+                this, token = token,
+                session = session
+            )
+        }
+
+        findViewById<ImageView>(R.id.goToFriends).setOnClickListener {
+            FriendsActivity.startFrom(
+                this, token = token, session = session
+            )
+        }
+        findViewById<ImageView>(R.id.goToFeed).setOnClickListener {
+            NewsActivity.startFrom(
+                this, token = token, session = session
+            )
+        }
 
         groupAdapter = GroupAdapter(this, ArrayList(), session, token)
         val mlayoutManager = LinearLayoutManager(this)

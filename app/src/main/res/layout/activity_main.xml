@@ -27,5 +27,12 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:text="@string/loginWithoutVk"/>
+
+        <Button
+            android:id="@+id/registerButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Регистрация" />
     </LinearLayout>
 </LinearLayout>

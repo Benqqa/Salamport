@@ -2,7 +2,6 @@ package com.newpage.salamport.groups
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,15 +9,15 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
-import com.newpage.salamport.ChatAdapter
-import com.newpage.salamport.MessagesAdapter
+import com.newpage.salamport.ChatActivity
+import com.newpage.salamport.FriendsActivity
 import com.newpage.salamport.R
-import com.newpage.salamport.services.TinderStart
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -106,6 +105,19 @@ class NewsActivity : AppCompatActivity() {
             adapter = postAdapter
         }
 
+        findViewById<ImageView>(R.id.goToMessages).setOnClickListener {
+            ChatActivity.startFrom(
+                this, token = token,
+                session = session
+            )
+        }
+
+        findViewById<ImageView>(R.id.goToFriends).setOnClickListener {
+            FriendsActivity.startFrom(
+                this, token = token, session = session
+            )
+        }
+
         findViewById<Button>(R.id.goToGroupList).setOnClickListener {
             MyGroups.startFrom(this, session = session, token = token)
         }
@@ -155,10 +167,11 @@ class NewsActivity : AppCompatActivity() {
                         client.newCall(requestForGroup).await().body?.string()
                     }
                     val groupJSON = JSONObject(group)
-                    val groupName = groupJSON.getString("name");
+                    val groupName = groupJSON.getString("name")
                     val groupPhoto = groupJSON.getString("photo")
                     post.groupName = groupName; post.groupPhoto = groupPhoto; post.groupID =
                         responseJSON.getString(i)
+                    posts.add(post)
                 }
                 runOnUiThread {
                     postAdapter.posts = posts

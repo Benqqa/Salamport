@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.newpage.salamport.ChatActivity
 import com.newpage.salamport.FriendsActivity
 import com.newpage.salamport.R
+import com.newpage.salamport.groups.NewsActivity
 
 class ServicesActivity : AppCompatActivity() {
 
@@ -27,12 +28,17 @@ class ServicesActivity : AppCompatActivity() {
                 session = session
             )
         }
-
         findViewById<ImageView>(R.id.goToFriends).setOnClickListener {
             FriendsActivity.startFrom(
                 this, token = token, session = session
             )
         }
+        findViewById<ImageView>(R.id.goToFeed).setOnClickListener {
+            NewsActivity.startFrom(
+                this, token = token, session = session
+            )
+        }
+
     }
 
     companion object {

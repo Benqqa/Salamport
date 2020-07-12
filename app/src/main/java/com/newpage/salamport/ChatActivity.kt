@@ -1,22 +1,25 @@
 package com.newpage.salamport
 
 import android.app.AlertDialog
-import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
+import com.newpage.salamport.groups.NewsActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -28,7 +31,6 @@ import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import ru.gildor.coroutines.okhttp.await
-import java.text.SimpleDateFormat
 
 data class Chat(
     val id: String,
@@ -243,6 +245,20 @@ class ChatActivity : AppCompatActivity() {
             mDialogBuilder.create().show()
         }
         loadChatList()
+        findViewById<ImageView>(R.id.goToFeed).setOnClickListener {
+            NewsActivity.startFrom(this, token = grishaToken, session = grishaSession)
+        }
+        findViewById<ImageView>(R.id.goToMessages).setOnClickListener {
+            ChatActivity.startFrom(
+                this, token = grishaToken,
+                session = grishaSession
+            )
+        }
+        findViewById<ImageView>(R.id.goToFriends).setOnClickListener {
+            FriendsActivity.startFrom(
+                this, token = grishaToken, session = grishaSession
+            )
+        }
     }
 
     private fun loadChatList() {

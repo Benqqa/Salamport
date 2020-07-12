@@ -31,41 +31,48 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <Button
+        <ImageView
             android:id="@+id/goToPrev"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="32dp"
+            android:scaleX="1.3"
+            android:scaleY="1.3"
+            android:src="@drawable/ic_skip_previous_black_24dp"
             android:text="prev" />
 
-        <Button
+        <ImageView
             android:id="@+id/goToPause"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_pauza_01"
             android:text="@string/pause" />
 
-        <Button
+        <ImageView
             android:id="@+id/goToPlay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_pley_01"
             android:text="@string/play" />
 
-        <Button
+        <ImageView
             android:id="@+id/goToNext"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_vpered_01"
             android:text="next" />
 
-        <Button
+        <ImageView
             android:id="@+id/goToStop"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/exo_icon_stop"
             android:text="@string/sex" />
     </LinearLayout>
 
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="96dp">
+        android:layout_height="60dp">
 
         <include layout="@layout/footer" />
     </LinearLayout>

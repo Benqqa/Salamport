@@ -2,13 +2,14 @@ package com.newpage.salamport.media
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
 import com.newpage.salamport.ChatActivity
 import com.newpage.salamport.FriendsActivity
 import com.newpage.salamport.R
+import com.newpage.salamport.groups.NewsActivity
 
 
 class MediaStart : AppCompatActivity() {
@@ -37,6 +38,11 @@ class MediaStart : AppCompatActivity() {
 
         findViewById<ImageView>(R.id.goToFriends).setOnClickListener {
             FriendsActivity.startFrom(
+                this, token = token, session = session
+            )
+        }
+        findViewById<ImageView>(R.id.goToFeed).setOnClickListener {
+            NewsActivity.startFrom(
                 this, token = token, session = session
             )
         }

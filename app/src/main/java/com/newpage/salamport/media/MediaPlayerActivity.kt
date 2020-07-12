@@ -10,7 +10,6 @@ import android.os.IBinder
 import android.os.RemoteException
 import android.support.v4.media.session.MediaControllerCompat
 import android.view.View
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -18,6 +17,7 @@ import com.bumptech.glide.Glide
 import com.newpage.salamport.ChatActivity
 import com.newpage.salamport.FriendsActivity
 import com.newpage.salamport.R
+import com.newpage.salamport.groups.NewsActivity
 import com.newpage.salamport.media.PlaybackService.PlaybackServiceBinder
 
 
@@ -29,11 +29,11 @@ class MediaPlayerActivity : AppCompatActivity() {
     private lateinit var session: String
     private lateinit var token: String
 
-    private lateinit var prevButton: Button
-    private lateinit var pauseButton: Button
-    private lateinit var playButton: Button
-    private lateinit var nextButton: Button
-    private lateinit var stopButton: Button
+    private lateinit var prevButton: ImageView
+    private lateinit var pauseButton: ImageView
+    private lateinit var playButton: ImageView
+    private lateinit var nextButton: ImageView
+    private lateinit var stopButton: ImageView
 
     private lateinit var textAuthor: TextView
     private lateinit var textTitle: TextView
@@ -71,6 +71,11 @@ class MediaPlayerActivity : AppCompatActivity() {
 
         findViewById<ImageView>(R.id.goToFriends).setOnClickListener {
             FriendsActivity.startFrom(
+                this, token = token, session = session
+            )
+        }
+        findViewById<ImageView>(R.id.goToFeed).setOnClickListener {
+            NewsActivity.startFrom(
                 this, token = token, session = session
             )
         }

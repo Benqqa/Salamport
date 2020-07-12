@@ -2,13 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginStart="20dp"
+    android:layout_marginTop="20dp"
     android:orientation="horizontal">
 
     <ImageView
         android:id="@+id/trackLogo"
-        android:layout_width="96dp"
-        android:layout_height="96dp"
-        android:layout_weight="0.2" />
+        android:layout_width="32dp"
+        android:layout_height="32dp" />
 
     <TextView
         android:id="@+id/trackTitle"
@@ -16,10 +17,10 @@
         android:layout_height="wrap_content"
         android:layout_weight="0.6" />
 
-    <TextView
+    <ImageView
         android:id="@+id/playTrack"
         android:layout_width="80dp"
         android:layout_height="wrap_content"
-        android:text=">"
-        android:layout_weight="0.2" />
+        android:layout_weight="0.2"
+        android:src="@drawable/ic_pley_01" />
 </LinearLayout>

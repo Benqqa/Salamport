@@ -2,7 +2,6 @@ package com.newpage.salamport.services
 
 import android.content.Context
 import android.content.Intent
-import android.media.Image
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
@@ -10,7 +9,10 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
-import com.newpage.salamport.*
+import com.newpage.salamport.ChatActivity
+import com.newpage.salamport.FriendsActivity
+import com.newpage.salamport.R
+import com.newpage.salamport.UserActivity
 import com.newpage.salamport.support.GestureHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -135,6 +137,7 @@ class TinderActivity : AppCompatActivity() {
                             .add("session", session)
                             .add("token", token)
                             .add("query", "true")
+                            .add("user_id", datings[currentIndex - 1].id)
                             .build()
                         val request = Request.Builder()
                             .url("https://salamport.newpage.xyz/api/confirm_match.php")
@@ -142,8 +145,9 @@ class TinderActivity : AppCompatActivity() {
                             .addHeader("Content-Type", "application/x-www-form-urlencoded")
                             .build()
                         val responseString = withContext(Dispatchers.IO) {
-                            client.newCall(request).await()
+                            client.newCall(request).await().body?.string()
                         }
+                        val r = responseString?.length
                     }
                     currentIndex++
                     renderDatings()
@@ -155,6 +159,7 @@ class TinderActivity : AppCompatActivity() {
                             .add("session", session)
                             .add("token", token)
                             .add("query", "false")
+                            .add("user_id", datings[currentIndex - 1].id)
                             .build()
                         val request = Request.Builder()
                             .url("https://salamport.newpage.xyz/api/confirm_match.php")
@@ -178,7 +183,9 @@ class TinderActivity : AppCompatActivity() {
             UserActivity.startFrom(
                 this, grishaSession = session,
                 grishaToken = token
+
             )
+            return
         }
         val upperText = findViewById<TextView>(R.id.textTINDER)
         val imgView = findViewById<ImageView>(R.id.imageOfT)
@@ -195,7 +202,7 @@ class TinderActivity : AppCompatActivity() {
             .into(imgView)
 
         upperText.text = datings[currentIndex].name + " " + datings[currentIndex].surname
-        rangeText.text = datings[currentIndex].radius
+        rangeText.text = datings[currentIndex].radius + " метров"
         tinderNativeCity.text = "Родной город: " + datings[currentIndex].nativeCity
     }
 

@@ -8,7 +8,6 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,19 +22,21 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
-import com.newpage.salamport.*
+import com.newpage.salamport.ChatActivity
+import com.newpage.salamport.FriendsActivity
+import com.newpage.salamport.R
+import com.newpage.salamport.groups.NewsActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.asRequestBody
 import org.json.JSONArray
-import org.json.JSONException
 import org.json.JSONObject
 import ru.gildor.coroutines.okhttp.await
 import java.io.File
-import java.lang.Exception
 
 
 class TrackAdapter(
@@ -47,7 +48,7 @@ class TrackAdapter(
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val photo: ImageView = view.findViewById(R.id.trackLogo)
         val text: TextView = view.findViewById(R.id.trackTitle)
-        val goToMessages: TextView = view.findViewById(R.id.playTrack)
+        val goToMessages: ImageView = view.findViewById(R.id.playTrack)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -139,6 +140,11 @@ class MusicList : AppCompatActivity() {
 
         findViewById<ImageView>(R.id.goToFriends).setOnClickListener {
             FriendsActivity.startFrom(
+                this, token = token, session = session
+            )
+        }
+        findViewById<ImageView>(R.id.goToFeed).setOnClickListener {
+            NewsActivity.startFrom(
                 this, token = token, session = session
             )
         }
@@ -235,11 +241,11 @@ class MusicList : AppCompatActivity() {
 
                 .addFormDataPart(
                     "music", mpFile.name,
-                    RequestBody.create("audio/mpeg".toMediaTypeOrNull(), mpFile)
+                    mpFile.asRequestBody("audio/mpeg".toMediaTypeOrNull())
                 )
                 .addFormDataPart(
                     "photo", logoFile.name,
-                    RequestBody.create("image/png".toMediaTypeOrNull(), logoFile)
+                    logoFile.asRequestBody("image/png".toMediaTypeOrNull())
                 )
                 .addFormDataPart("session", session)
                 .addFormDataPart("token", token)

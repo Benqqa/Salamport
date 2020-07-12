@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
+import com.newpage.salamport.groups.NewsActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -41,6 +42,7 @@ class UsersSearchAdapter(
         val nameAndUsername: TextView = view.findViewById(R.id.friendNameAndUsername)
         val friendAvatar: ImageView = view.findViewById(R.id.friendAvatar)
         val friendToChat: ImageView = view.findViewById(R.id.friendToChat)
+        val goToChat: ImageView = view.findViewById(R.id.goToChat)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -69,6 +71,31 @@ class UsersSearchAdapter(
                     .bitmapTransform(RoundedCorners(250))
             )
             .into(holder.friendAvatar)
+
+        holder.goToChat.setOnClickListener {
+            GlobalScope.launch {
+                val requestBody = FormBody.Builder()
+                    .add("session", session)
+                    .add("token", token)
+                    .add("member_id", user.id)
+                    .build()
+                val request = Request.Builder()
+                    .url("https://salamport.newpage.xyz/api/create_chat_priv.php")
+                    .post(requestBody)
+                    .addHeader("Content-Type", "application/x-www-form-urlencoded")
+                    .build()
+                val response =
+                    withContext(Dispatchers.IO) { client.newCall(request).await().body?.string() }
+                if (response != "false")
+                    MessagesActivity.startFrom(
+                        context,
+                        session = session,
+                        token = token,
+                        chat_id = JSONArray(response).getString(0),
+                        isPrivate = "true"
+                    )
+            }
+        }
 
         holder.friendToChat.setOnClickListener {
             GlobalScope.launch {
@@ -124,6 +151,9 @@ class UserSearchResult : AppCompatActivity() {
             FriendsActivity.startFrom(
                 this, token = token, session = session
             )
+        }
+        findViewById<ImageView>(R.id.goToFeed).setOnClickListener {
+            NewsActivity.startFrom(this, token = token, session = session)
         }
 
         recyclerView.apply {

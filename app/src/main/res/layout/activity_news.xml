@@ -25,17 +25,20 @@
         android:orientation="horizontal">
 
         <Button
+            android:id="@+id/goToGroupList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Посмотреть группы"
             android:layout_weight="0.7"
-            android:id="@+id/goToGroupList" />
+            android:background="@color/white"
+            android:shadowDx="10"
+            android:shadowDy="10"
+            android:text="Посмотреть группы" />
 
         <ImageView
             android:id="@+id/subscribeGroup"
             android:layout_width="wrap_content"
-            android:src="@drawable/ic_plyus_01"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_plyus_01" />
     </LinearLayout>
 
     <LinearLayout
@@ -46,7 +49,10 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/postContainer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp" />
     </LinearLayout>
 
     <LinearLayout

@@ -2,15 +2,12 @@ package com.newpage.salamport
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.widget.Button
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
-import com.newpage.salamport.media.MusicList
 import com.vk.api.sdk.VK
 import com.vk.api.sdk.auth.VKAccessToken
 import com.vk.api.sdk.auth.VKAuthCallback
@@ -19,7 +16,6 @@ import okhttp3.*
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
-import java.lang.Exception
 import java.nio.charset.StandardCharsets
 
 class MainActivity : AppCompatActivity() {
@@ -53,6 +49,11 @@ class MainActivity : AppCompatActivity() {
                         VKScope.OFFLINE)
                 )
             }
+        }
+
+        val register: Button = findViewById(R.id.registerButton)
+        register.setOnClickListener {
+            RegistrationActivity.startFrom(this)
         }
 
         val loginWithoutVK: AppCompatButton = findViewById(R.id.loginWithoutVk)

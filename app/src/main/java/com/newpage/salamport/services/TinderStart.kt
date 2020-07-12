@@ -3,17 +3,17 @@ package com.newpage.salamport.services
 import android.Manifest
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.app.ActivityCompat
 import com.location.aravind.getlocation.GeoLocator
 import com.newpage.salamport.ChatActivity
 import com.newpage.salamport.FriendsActivity
 import com.newpage.salamport.R
+import com.newpage.salamport.groups.NewsActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -51,6 +51,10 @@ class TinderStart : AppCompatActivity() {
             FriendsActivity.startFrom(
                 this, token = token, session = session
             )
+        }
+
+        findViewById<ImageView>(R.id.goToFeed).setOnClickListener {
+            NewsActivity.startFrom(this, token = token, session = session)
         }
 
         ActivityCompat.requestPermissions(
